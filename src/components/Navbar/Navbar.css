@@ -42,3 +42,35 @@
     color: #e0e0e0;
     margin-right: 0.5rem;
   }
+
+  .ocid-user-info-navbar { /* Renamed from OCIDConnectButton.css's ocid-user-info */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .navbar-user-greeting {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+  }
+  
+  .navbar-logout-button {
+    font-size: 0.9rem;
+    background-color: #6c757d; /* Grey for logout */
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+  }
+  
+  .navbar-logout-button:hover:not(:disabled) {
+    background-color: #5a6268; /* Darker grey */
+  }
+  
+  .navbar-logout-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
