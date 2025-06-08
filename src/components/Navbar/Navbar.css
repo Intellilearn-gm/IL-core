@@ -1,0 +1,44 @@
+/* src/components/Navbar/Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50; /* From Dashboard.css */
+    color: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Added subtle shadow */
+    position: sticky; /* Optional: make navbar sticky */
+    top: 0;
+    z-index: 1000; /* Ensure navbar is above other content */
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Spacing between links/buttons */
+  }
+  
+  .navbar-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px; /* Slight rounding for hover effect area */
+  }
+  
+  .navbar-links a:hover {
+    text-decoration: none; /* Remove underline, use background instead */
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar-user-greeting {
+    color: #e0e0e0;
+    margin-right: 0.5rem;
+  }

@@ -1,0 +1,43 @@
+/* src/features/DAODungeonGame/DAODungeonGame.css */
+
+.dao-dungeon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center content vertically */
+    background: #2c2f33; /* Darker, slightly desaturated background */
+    padding: 30px; /* Increased padding */
+    min-height: calc(100vh - 60px); /* Adjust for navbar height if sticky, approx 60-70px */
+    box-sizing: border-box;
+    color: #e0e0e0; /* Light text for dark background */
+  }
+  
+  .dao-dungeon-title {
+    font-size: 3rem; /* Larger title */
+    margin-bottom: 30px; /* Increased margin */
+    color: #7289da; /* Discord-like purple/blue for a "DAO" feel */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    font-family: 'Georgia', serif; /* More thematic font */
+  }
+  
+  .dao-dungeon-canvas {
+    border: 5px solid #4f545c; /* Thematic border color */
+    background: #23272a; /* Dark canvas background */
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3); /* Softer shadow */
+    max-width: 100%; /* Ensure responsiveness */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  .dao-dungeon-info {
+    margin-top: 30px; /* Increased margin */
+    font-size: 1.25rem; /* Larger info text */
+    text-align: center;
+    max-width: 700px; /* Wider info area */
+    line-height: 1.7; /* Improved readability */
+    color: #b9bbbe; /* Lighter grey for info text */
+    font-family: 'Verdana', sans-serif;
+  }
+  
+  .dao-dungeon-info p {
+      margin-bottom: 10px;
+  }

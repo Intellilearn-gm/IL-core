@@ -1,0 +1,98 @@
+/* src/pages/DashboardPage/DashboardPage.css */
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5; /* Consistent background */
+  }
+  
+  /* Hero Section Styling */
+  .dashboard-hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(45deg, #2196f3, #64b5f6); /* Adjusted gradient from original */
+    color: #fff;
+    /* Example using an image background, if preferred:
+    background: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    */
+  }
+  
+  /* If using image background with overlay:
+  .dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+  } */
+  
+  .dashboard-hero-content {
+    position: relative; /* Needed if using ::before overlay */
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .dashboard-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  }
+  
+  .dashboard-hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 1rem auto;
+    line-height: 1.6;
+  }
+  
+  /* Games List Section */
+  .dashboard-games-list {
+    padding: 2rem;
+    max-width: 1200px; /* Max width for content area */
+    margin: 0 auto; /* Center content area */
+    width: 100%;
+  }
+  
+  .dashboard-games-list h2 {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  /* Cards Container Grid */
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 2rem; /* Increased gap */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .dashboard-hero h1 {
+      font-size: 2.5rem;
+    }
+    .dashboard-hero p {
+      font-size: 1.1rem;
+    }
+    .cards-container {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .dashboard-hero {
+      padding: 3rem 1rem;
+    }
+    .dashboard-hero h1 {
+      font-size: 2rem;
+    }
+    .dashboard-games-list {
+      padding: 1.5rem 1rem;
+    }
+  }
