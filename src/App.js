@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
-import ArcheryGamePage from './features/ArcheryGame/ArcheryGamePage';
-import DAODungeonGamePage from './features/DAODungeonGame/DAODungeonGamePage';
-import BlockMinerGamePage from './features/BlockMinerGame/BlockMinerGamePage';
-import OpenCampusCodeQuestPage from './features/OpenCampusCodeQuest/OpenCampusCodeQuestPage';
+import ArcheryGamePage from './games/ArcheryGame/ArcheryGamePage';
+import DAODungeonGamePage from './games/DAODungeonGame/DAODungeonGamePage';
+import BlockMinerGamePage from './games/BlockMinerGame/BlockMinerGamePage';
+import OpenCampusCodeQuestPage from './games/OpenCampusCodeQuest/OpenCampusCodeQuestPage';
 import AuthCallbackPage from './features/Auth/AuthCallbackPage';
 import LoginPage from './pages/LoginPage/LoginPage'; // Import Login Page
 import ProtectedRoute from './components/Auth/ProtectedRoute'; // Import ProtectedRoute
