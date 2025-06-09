@@ -1,46 +1,55 @@
-/* src/features/BlockMinerGame/BlockMinerGame.css */
+/* src/games/BlockMinerGame/BlockMinerGame.css */
 
 .block-miner-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Center content */
-    min-height: calc(100vh - 60px); /* Adjust for navbar */
-    background: #3a2e24; /* Dark brown, earthy tone */
-    color: #f0e6d2; /* Creamy off-white text */
-    padding: 25px;
-    box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace; /* Pixel-game friendly font */
-  }
-  
-  .miner-title {
-    margin: 15px 0 25px 0; /* Adjusted margin */
-    font-size: 2.8rem; /* Larger title */
-    color: #ffc107; /* Gold color for title */
-    text-shadow: 2px 2px 0px #8B4513, 3px 3px 5px rgba(0, 0, 0, 0.6); /* More prominent shadow */
-    letter-spacing: 1px;
-  }
-  
-  .block-miner-canvas {
-    border: 4px solid #8B4513; /* SaddleBrown border, like wood frame */
-    background: #1e1a17; /* Very dark brown/black for deep mine */
-    margin: 20px 0;
-    box-shadow: 0 0 15px rgba(255, 193, 7, 0.3); /* Gold glow */
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .block-miner-info {
-    max-width: 650px; /* Wider info */
-    text-align: center;
-    font-size: 1.1rem; /* Slightly larger text */
-    line-height: 1.7;
-    margin-top: 20px;
-    background-color: rgba(0,0,0,0.3); /* Semi-transparent dark background for info box */
-    padding: 15px;
-    border-radius: 5px;
-    border: 1px solid #5a3d2b;
-  }
-  .block-miner-info p {
-      margin-bottom: 8px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Full width */
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent scrolling */
+  background: #3a2e24;
+  color: #f0e6d2;
+  /* padding: 25px; */ /* Remove padding, use margins on children */
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.miner-title {
+  margin: 15px 0 20px 0; /* Adjusted margin */
+  font-size: 2.5rem; /* Slightly smaller if space is tight */
+  color: #ffc107;
+  text-shadow: 2px 2px 0px #8B4513, 3px 3px 5px rgba(0, 0, 0, 0.6);
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.block-miner-canvas {
+  border: 4px solid #8B4513;
+  background: #1e1a17;
+  /* margin: 20px 0; */ /* Margin can push things if container is 100vh */
+  margin-bottom: 15px; /* Space between canvas and info */
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+  max-width: calc(100% - 40px);
+  max-height: calc(100vh - 140px); /* Adjust based on title/info heights */
+  height: auto;
+  flex-shrink: 1;
+}
+
+.block-miner-info {
+  max-width: 650px;
+  text-align: center;
+  font-size: 1rem; /* Slightly smaller if needed */
+  line-height: 1.6;
+  /* margin-top: 20px; */ /* Margin controlled by canvas margin-bottom */
+  background-color: rgba(0,0,0,0.3);
+  padding: 10px 15px; /* Reduced padding */
+  border-radius: 5px;
+  border: 1px solid #5a3d2b;
+  flex-shrink: 0;
+  overflow-y: auto; /* Allow internal scroll for long info */
+  max-height: 90px;  /* Constrain info height */
+}
+.block-miner-info p {
+    margin-bottom: 8px;
+}
