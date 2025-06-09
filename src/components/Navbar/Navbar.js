@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // useNavigate is no longer needed here
+import { Link } from 'react-router-dom'; // This is react-router-dom's Link
 import { useOCAuth } from '@opencampus/ocid-connect-js';
 import './Navbar.css';
+import logoSrc from '../../assets/images/logo.png'; // ENSURE THIS PATH IS CORRECT
 
 const Navbar = () => {
   const { authState, ocAuth } = useOCAuth();
-  // const navigate = useNavigate(); // REMOVE THIS LINE
 
   const handleLogout = async () => {
     if (!ocAuth) {
@@ -18,37 +18,32 @@ const Navbar = () => {
         logoutParams: {
           returnTo: `${window.location.origin}/login`
         }
-        // If the above doesn't work, and the JS docs are more accurate for this specific method:
-        // returnUrl: `${window.location.origin}/login`
       });
-      // After this call, the SDK should clear its local state.
-      // The useOCAuth hook will update, authState.isAuthenticated becomes false.
-      // ProtectedRoute will then redirect to /login if the user was on a protected page.
-      // If the user was on a public page (not possible in current setup after login), they'd stay there
-      // but the UI would reflect logout.
-
     } catch (error) {
       console.error('OCID Logout error:', error);
-      // If a critical error occurs, the user might still be "logged in" locally.
-      // Handling this robustly without a "force clear local SDK state" method is hard.
     }
   };
 
+  // If not authenticated, don't render the navbar.
+  // This is a common pattern, but you might want a minimal navbar for login pages.
+  // For now, sticking to the provided logic.
   if (!authState.isAuthenticated) {
-    return null;
+    return null; 
   }
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">
-        Game Arcade
+      <Link to="/" className="navbar-brand"> {/* Changed to standard react-router-dom Link to homepage */}
+        <img src={logoSrc} alt="IntelliLearn Logo" className="navbar-logo-img" />
+        <span className="navbar-brand-text">IntelliLearn</span>
       </Link>
       <div className="navbar-links">
-        <Link to="/">Dashboard</Link>
+        {/* The authState.isAuthenticated check here is a bit redundant if the whole Navbar is hidden when not authenticated */}
+        {/* However, it doesn't hurt. */}
         {authState.isAuthenticated && (
           <div className="ocid-user-info-navbar">
             <span className="navbar-user-greeting">
-              Hi, {authState.idTokenPayload?.preferred_username || authState.idTokenPayload?.name || 'Player'}!
+              Hi, {authState.idTokenPayload?.preferred_username || authState.idTokenPayload?.name || 'Learner'}!
             </span>
             <button onClick={handleLogout} className="navbar-logout-button" disabled={!ocAuth}>
               Logout

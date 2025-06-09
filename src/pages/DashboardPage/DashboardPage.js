@@ -17,8 +17,8 @@ const DashboardPage = () => {
     <div className="dashboard-page">
       <section className="dashboard-hero">
         <div className="dashboard-hero-content">
-          <h1>Welcome to the Game Arcade!</h1>
-          <p>Choose a game from our collection below and start your adventure. Powered by OpenCampus innovation.</p>
+          <h1>Welcome to the IntelliLearn!</h1>
+          <p>Choose a game from our collection below and start your adventure. Powered by IntelliLearn.</p>
         </div>
       </section>
       <section className="dashboard-games-list">
