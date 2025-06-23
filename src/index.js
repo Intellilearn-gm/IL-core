@@ -18,7 +18,9 @@ const ocidOpts = {
 };
 
 // Determine sandboxMode (e.g., based on environment variable or always true for dev)
-const sandboxMode = process.env.NODE_ENV !== 'production';
+// const sandboxMode = process.env.NODE_ENV !== 'production';
+const sandboxMode = true;
+
 if (!process.env.REACT_APP_OCID_CLIENT_ID && !sandboxMode) {
     console.warn("REACT_APP_OCID_CLIENT_ID is not set, but not in sandbox mode. This might cause issues in live environment.");
 } else if (!process.env.REACT_APP_OCID_CLIENT_ID && sandboxMode) {

@@ -59,7 +59,7 @@ const LoginPage = () => {
   return (
     <div className="login-page-container">
       <div className="login-box">
-        <h1>Welcome to IntelliLaern</h1>
+        <h1>Welcome to the IntelliLearn!</h1>
         <p>Please log in with your OpenCampus ID to continue.</p>
         {authState.error && (
           <div className="login-error-message">
