@@ -1,0 +1,219 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 229 225 216; /* Sandstone Gray */
+    --foreground: 46 43 43; /* Charcoal Slate */
+    --card: 255 255 255;
+    --card-foreground: 46 43 43;
+    --popover: 255 255 255;
+    --popover-foreground: 46 43 43;
+    --primary: 255 107 138; /* Sunrise Pink */
+    --primary-foreground: 255 255 255;
+    --secondary: 255 232 214; /* Peach Whisper */
+    --secondary-foreground: 46 43 43;
+    --muted: 255 241 204; /* Apricot Mist */
+    --muted-foreground: 125 122 117; /* Smoky Taupe */
+    --accent: 255 164 92; /* Tangerine Glow */
+    --accent-foreground: 255 255 255;
+    --destructive: 255 61 74; /* Coral Spark */
+    --destructive-foreground: 255 255 255;
+    --border: 217 128 155 / 0.2; /* Dusky Rose with opacity */
+    --input: 255 255 255 / 0.1;
+    --ring: 255 107 138; /* Sunrise Pink */
+    --chart-1: 255 107 138;
+    --chart-2: 255 164 92;
+    --chart-3: 255 209 102;
+    --chart-4: 255 61 74;
+    --chart-5: 217 128 155;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 15 15 15;
+    --foreground: 255 255 255;
+    --card: 25 25 25;
+    --card-foreground: 255 255 255;
+    --popover: 25 25 25;
+    --popover-foreground: 255 255 255;
+    --primary: 255 107 138;
+    --primary-foreground: 255 255 255;
+    --secondary: 40 40 40;
+    --secondary-foreground: 255 255 255;
+    --muted: 40 40 40;
+    --muted-foreground: 163 163 163;
+    --accent: 255 164 92;
+    --accent-foreground: 255 255 255;
+    --destructive: 255 61 74;
+    --destructive-foreground: 255 255 255;
+    --border: 40 40 40;
+    --input: 40 40 40;
+    --ring: 255 107 138;
+    --chart-1: 255 107 138;
+    --chart-2: 255 164 92;
+    --chart-3: 255 209 102;
+    --chart-4: 255 61 74;
+    --chart-5: 217 128 155;
+  }
+
+  .purple {
+    --background: 15 10 25;
+    --foreground: 255 255 255;
+    --card: 25 15 35;
+    --card-foreground: 255 255 255;
+    --popover: 25 15 35;
+    --popover-foreground: 255 255 255;
+    --primary: 168 85 247; /* Purple */
+    --primary-foreground: 255 255 255;
+    --secondary: 45 25 65;
+    --secondary-foreground: 255 255 255;
+    --muted: 45 25 65;
+    --muted-foreground: 163 163 163;
+    --accent: 236 72 153; /* Pink */
+    --accent-foreground: 255 255 255;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
+    --border: 45 25 65;
+    --input: 45 25 65;
+    --ring: 168 85 247;
+    --chart-1: 168 85 247;
+    --chart-2: 236 72 153;
+    --chart-3: 147 51 234;
+    --chart-4: 192 132 252;
+    --chart-5: 217 70 239;
+  }
+
+  .sunset {
+    --background: 255 232 214; /* Peach Whisper */
+    --foreground: 46 43 43; /* Charcoal Slate */
+    --card: 255 255 255;
+    --card-foreground: 46 43 43;
+    --popover: 255 255 255;
+    --popover-foreground: 46 43 43;
+    --primary: 255 107 138; /* Sunrise Pink */
+    --primary-foreground: 255 255 255;
+    --secondary: 255 232 214; /* Peach Whisper */
+    --secondary-foreground: 46 43 43;
+    --muted: 255 241 204; /* Apricot Mist */
+    --muted-foreground: 125 122 117; /* Smoky Taupe */
+    --accent: 255 164 92; /* Tangerine Glow */
+    --accent-foreground: 255 255 255;
+    --destructive: 255 61 74; /* Coral Spark */
+    --destructive-foreground: 255 255 255;
+    --border: 255 232 214 / 0.3; /* Peach Whisper with opacity */
+    --input: 255 255 255 / 0.1;
+    --ring: 255 107 138; /* Sunrise Pink */
+    --chart-1: 255 107 138;
+    --chart-2: 255 164 92;
+    --chart-3: 255 209 102;
+    --chart-4: 255 61 74;
+    --chart-5: 217 128 155;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom glassmorphism utilities */
+.glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-strong {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced glassmorphism with sunset theme */
+.glass-sunset {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-strong-sunset {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Smooth animations */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+
+/* Custom scrollbar with sunset theme */
+::-webkit-scrollbar-track-sunset {
+  background: rgba(255, 232, 214, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb-sunset {
+  background: linear-gradient(to bottom, #ff6b8a, #ffa45c);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb-sunset:hover {
+  background: linear-gradient(to bottom, #ff3d4a, #ff6b8a);
+}
+
+/* Theme-specific enhancements */
+.purple {
+  background: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+}
+
+.sunset {
+  background: linear-gradient(135deg, #e5e1d8 0%, #ffe8d6 100%);
+  min-height: 100vh;
+}
+
+/* Enhanced shadow effects */
+.shadow-sunset {
+  box-shadow: 0 10px 25px rgba(255, 107, 138, 0.1), 0 4px 10px rgba(255, 164, 92, 0.1);
+}
+
+/* Glow effects for interactive elements */
+.glow-sunset {
+  box-shadow: 0 0 20px rgba(255, 107, 138, 0.3);
+}
+
+/* Progress bar styling */
+.progress-sunset {
+  background: linear-gradient(to right, #ff6b8a, #ffa45c, #ffd166);
+}
