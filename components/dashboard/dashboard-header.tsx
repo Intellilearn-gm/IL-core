@@ -8,6 +8,11 @@ interface DashboardHeaderProps {
 }
 
 export default function DashboardHeader({ onLogout }: DashboardHeaderProps) {
+  const handleLogout = () => {
+    console.log('Logout button clicked!')
+    onLogout()
+  }
+
   return (
     <nav className="backdrop-blur-xl bg-white/20 border-b border-white/30 px-6 py-4 shadow-lg">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -24,8 +29,8 @@ export default function DashboardHeader({ onLogout }: DashboardHeaderProps) {
           </div>
           <Button
             variant="outline"
-            onClick={onLogout}
-            className="bg-white/20 border-white/40 text-[#2E2B2B] hover:bg-white/30 rounded-lg backdrop-blur-sm"
+            onClick={handleLogout}
+            className="bg-white/20 border-white/40 text-[#2E2B2B] hover:bg-white/30 rounded-lg backdrop-blur-sm cursor-pointer"
           >
             Logout
           </Button>

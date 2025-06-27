@@ -7,12 +7,22 @@ import DashboardPage from "@/app/dashboard/page"
 export default function IntelliLearnApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+  const handleLogout = () => {
+    console.log('Logout function called, setting isLoggedIn to false')
+    setIsLoggedIn(false)
+  }
+
+  const handleLogin = () => {
+    console.log('Login function called, setting isLoggedIn to true')
+    setIsLoggedIn(true)
+  }
+
   return (
     <div className="min-h-screen">
       {!isLoggedIn ? (
-        <LoginPage onLogin={() => setIsLoggedIn(true)} />
+        <LoginPage onLogin={handleLogin} />
       ) : (
-        <DashboardPage onLogout={() => setIsLoggedIn(false)} />
+        <DashboardPage onLogout={handleLogout} />
       )}
     </div>
   )

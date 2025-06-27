@@ -1,5 +1,9 @@
 {
-  "/games/block-miner/page": "app/games/block-miner/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/page": "app/page.js"
+  "/games/oc-code-quest/page": "app/games/oc-code-quest/page.js",
+  "/page": "app/page.js",
+  "/games/block-miner/page": "app/games/block-miner/page.js",
+  "/games/dao-dungeon/page": "app/games/dao-dungeon/page.js",
+  "/games/archery-pro/page": "app/games/archery-pro/page.js"
 }
