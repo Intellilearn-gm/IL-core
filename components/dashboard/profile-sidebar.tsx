@@ -1,19 +1,43 @@
 "use client"
 
 import { Progress } from "@/components/ui/progress"
-import { Wallet, Trophy, Flame, Coins } from "lucide-react"
+import { Wallet, Trophy, Flame, Coins, Copy, Check } from "lucide-react"
+import { useAddress } from '@thirdweb-dev/react'
+import { useState } from 'react'
 
 interface ProfileSidebarProps {
   onStreakClick: () => void
 }
 
 export default function ProfileSidebar({ onStreakClick }: ProfileSidebarProps) {
+  const address = useAddress()
+  const [copied, setCopied] = useState(false)
+  
   const achievements = [
     { name: "First Win", earned: true },
     { name: "Streak Master", earned: true },
     { name: "Token Collector", earned: false },
     { name: "NFT Hunter", earned: true },
   ]
+
+  // Format wallet address for display
+  const formatAddress = (addr: string | undefined) => {
+    if (!addr) return "Not Connected"
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+  }
+
+  // Copy address to clipboard
+  const copyAddress = async () => {
+    if (!address) return
+    
+    try {
+      await navigator.clipboard.writeText(address)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy address:', err)
+    }
+  }
 
   return (
     <div className="lg:col-span-1">
@@ -24,7 +48,22 @@ export default function ProfileSidebar({ onStreakClick }: ProfileSidebarProps) {
             <Wallet className="w-8 h-8 text-white" />
           </div>
           <h3 className="font-semibold text-[#2E2B2B] mb-1">@learner123</h3>
-          <p className="text-sm text-[#7D7A75]">0x1234...5678</p>
+          <div className="flex items-center justify-center gap-2">
+            <p className="text-sm text-[#7D7A75]">{formatAddress(address)}</p>
+            {address && (
+              <button
+                onClick={copyAddress}
+                className="p-1 hover:bg-white/20 rounded-md transition-colors duration-200 group"
+                title="Copy address"
+              >
+                {copied ? (
+                  <Check className="w-3 h-3 text-green-600" />
+                ) : (
+                  <Copy className="w-3 h-3 text-[#7D7A75] group-hover:text-[#FF6B8A] transition-colors duration-200" />
+                )}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* IL Tokens with animation */}

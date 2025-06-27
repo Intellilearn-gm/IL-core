@@ -1,8 +1,9 @@
-"use client"
+// app/page.tsx
+'use client'
 
-import { useState } from "react"
-import LoginPage from "@/app/login/page"
-import DashboardPage from "@/app/dashboard/page"
+import { useState } from 'react'
+import LoginPage from '@/app/login/page'
+import DashboardPage from '@/app/dashboard/page'
 
 export default function IntelliLearnApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
