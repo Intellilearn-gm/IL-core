@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import LoginScreen from "@/components/login-screen"
-import Dashboard from "@/components/dashboard"
+import LoginPage from "@/app/login/page"
+import DashboardPage from "@/app/dashboard/page"
 
 export default function IntelliLearnApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -10,9 +10,9 @@ export default function IntelliLearnApp() {
   return (
     <div className="min-h-screen">
       {!isLoggedIn ? (
-        <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+        <LoginPage onLogin={() => setIsLoggedIn(true)} />
       ) : (
-        <Dashboard onLogout={() => setIsLoggedIn(false)} />
+        <DashboardPage onLogout={() => setIsLoggedIn(false)} />
       )}
     </div>
   )

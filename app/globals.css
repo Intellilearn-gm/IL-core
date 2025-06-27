@@ -164,43 +164,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
-}
-
-/* Custom scrollbar with sunset theme */
-::-webkit-scrollbar-track-sunset {
   background: rgba(255, 232, 214, 0.3);
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb-sunset {
+::-webkit-scrollbar-thumb {
   background: linear-gradient(to bottom, #ff6b8a, #ffa45c);
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb-sunset:hover {
+::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, #ff3d4a, #ff6b8a);
-}
-
-/* Theme-specific enhancements */
-.purple {
-  background: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
-}
-
-.sunset {
-  background: linear-gradient(135deg, #e5e1d8 0%, #ffe8d6 100%);
-  min-height: 100vh;
 }
 
 /* Enhanced shadow effects */
@@ -216,4 +190,15 @@
 /* Progress bar styling */
 .progress-sunset {
   background: linear-gradient(to right, #ff6b8a, #ffa45c, #ffd166);
+}
+
+/* Theme-specific enhancements */
+.purple {
+  background: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+}
+
+.sunset {
+  background: linear-gradient(135deg, #e5e1d8 0%, #ffe8d6 100%);
+  min-height: 100vh;
 }
