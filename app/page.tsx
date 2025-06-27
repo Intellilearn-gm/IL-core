@@ -16,6 +16,7 @@ export default function IntelliLearnApp() {
   const handleLogin = () => {
     console.log('Login function called, setting isLoggedIn to true')
     setIsLoggedIn(true)
+    console.log('isLoggedIn state updated to:', true)
   }
 
   return (

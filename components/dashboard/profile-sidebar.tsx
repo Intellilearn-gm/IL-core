@@ -1,65 +1,65 @@
-"use client"
+// components/dashboard/profile-sidebar.tsx
+"use client";
 
-import { Progress } from "@/components/ui/progress"
-import { Wallet, Trophy, Flame, Coins, Copy, Check } from "lucide-react"
-import { useAddress } from '@thirdweb-dev/react'
-import { useState } from 'react'
+import React from "react";
+import { useAddress } from "@thirdweb-dev/react";
+import { useProfile } from "@/lib/profile";
+import { Copy, Check, Wallet, Trophy, Flame, Coins } from "lucide-react";
+import { useState } from "react";
+import { Progress } from "@/components/ui/progress";
 
-interface ProfileSidebarProps {
-  onStreakClick: () => void
-}
+export default function ProfileSidebar({ onStreakClick }: { onStreakClick: () => void }) {
+  const address = useAddress();
+  const { profile, loading } = useProfile(address || "");
+  const [copied, setCopied] = useState(false);
 
-export default function ProfileSidebar({ onStreakClick }: ProfileSidebarProps) {
-  const address = useAddress()
-  const [copied, setCopied] = useState(false)
-  
+  const displayName = profile ? profile.username : "Not set";
+  const displayAvatar = profile ? profile.avatar_url : "👤";
+
+  const formatAddress = (addr?: string) =>
+    addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "Not Connected";
+
+  const copyAddress = async () => {
+    if (!address) return;
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error("copy failed", e);
+    }
+  };
+
   const achievements = [
     { name: "First Win", earned: true },
     { name: "Streak Master", earned: true },
     { name: "Token Collector", earned: false },
     { name: "NFT Hunter", earned: true },
-  ]
-
-  // Format wallet address for display
-  const formatAddress = (addr: string | undefined) => {
-    if (!addr) return "Not Connected"
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`
-  }
-
-  // Copy address to clipboard
-  const copyAddress = async () => {
-    if (!address) return
-    
-    try {
-      await navigator.clipboard.writeText(address)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy address:', err)
-    }
-  }
+  ];
 
   return (
     <div className="lg:col-span-1">
       <div className="backdrop-blur-xl bg-white/20 border border-white/30 rounded-lg p-6 shadow-xl">
         {/* Profile Header */}
         <div className="text-center mb-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#FF6B8A] to-[#FFA45C] rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-            <Wallet className="w-8 h-8 text-white" />
+          <div className="w-20 h-20 bg-gradient-to-br from-[#FF6B8A] to-[#FFA45C] rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg text-4xl">
+            {displayAvatar}
           </div>
-          <h3 className="font-semibold text-[#2E2B2B] mb-1">@learner123</h3>
+          <h3 className="font-semibold text-[#2E2B2B] mb-1">
+            {loading ? "Loading..." : displayName}
+          </h3>
           <div className="flex items-center justify-center gap-2">
             <p className="text-sm text-[#7D7A75]">{formatAddress(address)}</p>
             {address && (
               <button
                 onClick={copyAddress}
-                className="p-1 hover:bg-white/20 rounded-md transition-colors duration-200 group"
+                className="p-1 hover:bg-white/20 rounded-md transition-colors duration-200"
                 title="Copy address"
               >
                 {copied ? (
                   <Check className="w-3 h-3 text-green-600" />
                 ) : (
-                  <Copy className="w-3 h-3 text-[#7D7A75] group-hover:text-[#FF6B8A] transition-colors duration-200" />
+                  <Copy className="w-3 h-3 text-[#7D7A75]" />
                 )}
               </button>
             )}
@@ -128,5 +128,5 @@ export default function ProfileSidebar({ onStreakClick }: ProfileSidebarProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

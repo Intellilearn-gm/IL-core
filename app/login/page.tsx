@@ -14,9 +14,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
+    console.log('Login button clicked, starting login process...')
     setIsLoading(true)
     // Simulate login process
     setTimeout(() => {
+      console.log('Login timeout completed, calling onLogin...')
       setIsLoading(false)
       onLogin()
     }, 2000)
