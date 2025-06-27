@@ -1,24 +1,53 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
 
-# testing
-/coverage
+# Next.js build output
+/.next
+/out
 
-# production
+# Static export if you ever use `next export`
+/out
+
+# Production build (if you happen to use a custom "build" dir)
 /build
 
-# misc
-.DS_Store
+# Coverage reports
+/coverage
+
+# Vercel local config and build artifacts
+/.vercel
+/.vercel/output
+
+# Cache folders
+/.cache
+/.turbo
+/.eslintcache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# Environment variables
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 .env
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# TypeScript
+/*.tsbuildinfo
+
+# Misc
+.sass-cache
