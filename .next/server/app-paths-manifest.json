@@ -1,3 +1,5 @@
 {
+  "/games/block-miner/page": "app/games/block-miner/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
   "/page": "app/page.js"
 }

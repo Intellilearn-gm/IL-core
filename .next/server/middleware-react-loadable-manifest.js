@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"app/games/block-miner/page.tsx -> @/components/games/block-miner/BlockMinerGame\":{\"id\":\"app/games/block-miner/page.tsx -> @/components/games/block-miner/BlockMinerGame\",\"files\":[\"static/css/_app-pages-browser_components_games_block-miner_BlockMinerGame_tsx.css\",\"static/chunks/_app-pages-browser_components_games_block-miner_BlockMinerGame_tsx.js\"]}}"
