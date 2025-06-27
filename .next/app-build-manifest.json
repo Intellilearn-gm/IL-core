@@ -21,25 +21,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/page.js"
     ],
-    "/games/dao-dungeon/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/games/dao-dungeon/page.js"
-    ],
     "/games/archery-pro/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/games/archery-pro/page.js"
+    ],
+    "/games/dao-dungeon/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/games/dao-dungeon/page.js"
     ],
     "/games/oc-code-quest/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/games/oc-code-quest/page.js"
     ],
-    "/_not-found/page": [
+    "/games/snapcard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/games/snapcard/page.js"
     ]
   }
 }

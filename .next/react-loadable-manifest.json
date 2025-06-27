@@ -12,5 +12,12 @@
       "static/css/_app-pages-browser_components_games_dao-dungeon_DAODungeonGame_tsx.css",
       "static/chunks/_app-pages-browser_components_games_dao-dungeon_DAODungeonGame_tsx.js"
     ]
+  },
+  "app/games/oc-code-quest/page.tsx -> @/components/games/oc-code-quest/OCCodeQuestGame": {
+    "id": "app/games/oc-code-quest/page.tsx -> @/components/games/oc-code-quest/OCCodeQuestGame",
+    "files": [
+      "static/css/_app-pages-browser_components_games_oc-code-quest_OCCodeQuestGame_tsx.css",
+      "static/chunks/_app-pages-browser_components_games_oc-code-quest_OCCodeQuestGame_tsx.js"
+    ]
   }
 }

@@ -1,0 +1,58 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./components/games/oc-code-quest/occodequest.module.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Peach Whisper page background & Charcoal Slate text */
+.occodequest_container__1NR2g {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #FFE8D6; /* Peach Whisper */
+    color: #2E2B2B;      /* Charcoal Slate */
+    box-sizing: border-box;
+    font-family: 'Fira Code', monospace;
+  }
+  
+  /* Dusky Rose title with soft glow */
+  .occodequest_title__1sIRI {
+    font-size: 2.5rem;
+    margin: 15px 0 20px;
+    color: #D9809B; /* Dusky Rose */
+    text-shadow: 0 0 5px rgba(217, 128, 155, 0.7);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  
+  /* Sunrise Pink border, Apricot Mist fill, Tangerine Glow shadow */
+  .occodequest_canvas__njniy {
+    border: 3px solid #FF6B8A;        /* Sunrise Pink */
+    background: #FFF1CC;              /* Apricot Mist */
+    box-shadow: 0 0 20px rgba(255, 164, 92, 0.4); /* Tangerine Glow */
+    max-width: calc(100% - 40px);
+    max-height: calc(100vh - 150px);
+    height: auto;
+    flex-shrink: 1;
+  }
+  
+  /* Apricot Mist info panel with Golden Ember dashed border */
+  .occodequest_info__eTv08 {
+    max-width: 700px;
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #2E2B2B;                    /* Charcoal Slate */
+    background-color: #FFF1CC;        /* Apricot Mist */
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px dashed #FFD166;       /* Golden Ember */
+    overflow-y: auto;
+    max-height: 100px;
+  }
+  
+  .occodequest_info__eTv08 p {
+    margin-bottom: 10px;
+  }
+  
