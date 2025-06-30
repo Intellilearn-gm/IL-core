@@ -1,0 +1,116 @@
+{
+  "name": "IntelliLearn - The Future of Blockchain Learning",
+  "short_name": "IntelliLearn",
+  "description": "Learn Web3 by playing games! Master blockchain concepts through interactive gaming.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFE8D6",
+  "theme_color": "#FF6B8A",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["education", "games", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/placeholder.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "IntelliLearn Dashboard"
+    },
+    {
+      "src": "/placeholder.jpg",
+      "sizes": "750x1334",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "IntelliLearn Mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Play Archery Pro",
+      "short_name": "Archery",
+      "description": "Learn blockchain through archery",
+      "url": "/games/archery-pro",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Play Block Miner",
+      "short_name": "Miner",
+      "description": "Mine blocks and learn Web3",
+      "url": "/games/block-miner",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Play Code Quest",
+      "short_name": "Quest",
+      "description": "Master OCID through space adventure",
+      "url": "/games/oc-code-quest",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Play DAO Dungeon",
+      "short_name": "DAO",
+      "description": "Explore governance in dungeons",
+      "url": "/games/dao-dungeon",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+} 
