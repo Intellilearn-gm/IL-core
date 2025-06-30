@@ -1,234 +1,238 @@
-// components/games/dao-dungeon3d/Game3D.tsx
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Physics, useBox, usePlane, useSphere } from "@react-three/cannon";
-import * as THREE from "three";
+import React, { useState, useCallback } from "react";
 import { StartScreen } from "./StartScreen";
-import { COLORS, generateLevelConfig, LevelConfig, BulletConfig } from "./constants";
+import { Dungeon } from "./Dungeon";
+import { BossRoom } from "./BossRoom";
+import { generateLevel, MAX_LEVEL } from "./uselevel";
+import { TimerHUD } from "./ui/TimerHUD";
+import { InventoryHUD } from "./ui/InventoryHUD";
+import styles from "./dao-dungeon-theme.module.css";
 
-////////////////////////////////////////////////////////////////////////////////
-// Ground
-////////////////////////////////////////////////////////////////////////////////
-function Ground() {
-  const [ref] = usePlane(() => ({
-    rotation: [-Math.PI / 2, 0, 0],
-    position: [0, 0, 0],
-  }));
-  return (
-    <mesh ref={ref} receiveShadow>
-      <planeGeometry args={[100, 100]} />
-      <meshStandardMaterial color={COLORS.FLOOR} />
-    </mesh>
-  );
+const TWISTS = [
+  { label: "Speed Boost!", key: "speed" },
+  { label: "Double Loot!", key: "double-loot" },
+  { label: "Extra Traps!", key: "extra-traps" },
+  { label: "Reverse Controls!", key: "reverse" },
+  { label: "Low Gravity!", key: "low-gravity" },
+  { label: "Invisible Enemies!", key: "invisible-enemies" },
+  { label: "Fast Enemies!", key: "fast-enemies" },
+  { label: "Extra Bullets!", key: "extra-bullets" },
+];
+
+function getRandomTwist(level: number) {
+  if (level === 1) return null;
+  return TWISTS[Math.floor(Math.random() * TWISTS.length)];
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Player Sphere
-////////////////////////////////////////////////////////////////////////////////
-function Player({
-  exitPos,
-  onReach,
-}: {
-  exitPos: [number, number, number];
-  onReach: () => void;
-}) {
-  const { camera } = useThree();
-  const [ref, api] = useSphere(() => ({
-    mass: 1,
-    position: [0, 1, 0],
-    args: [0.5],
-  }));
-  const velocity = useRef<[number, number, number]>([0, 0, 0]);
-  const keys = useRef<Record<string, boolean>>({});
-  const tmpPos = useRef(new THREE.Vector3());
-  const exitVec = new THREE.Vector3(...exitPos);
-
-  // subscribe to velocity for camera follow
-  useEffect(() => {
-    const unsub = api.velocity.subscribe((v) => (velocity.current = v));
-    return unsub;
-  }, [api.velocity]);
-
-  // keyboard handlers
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => (keys.current[e.code] = true);
-    const up = (e: KeyboardEvent) => (keys.current[e.code] = false);
-    window.addEventListener("keydown", down);
-    window.addEventListener("keyup", up);
-    return () => {
-      window.removeEventListener("keydown", down);
-      window.removeEventListener("keyup", up);
-    };
-  }, []);
-
-  useFrame(() => {
-    try {
-      // apply movement force
-      const force: [number, number, number] = [0, 0, 0];
-      const speed = 5;
-      if (keys.current["KeyW"] || keys.current["ArrowUp"]) force[2] -= speed;
-      if (keys.current["KeyS"] || keys.current["ArrowDown"]) force[2] += speed;
-      if (keys.current["KeyA"] || keys.current["ArrowLeft"]) force[0] -= speed;
-      if (keys.current["KeyD"] || keys.current["ArrowRight"]) force[0] += speed;
-      api.applyForce(force, [0, 0, 0]);
-
-      // camera follow
-      ref.current!.getWorldPosition(tmpPos.current);
-      camera.position.lerp(
-        new THREE.Vector3(tmpPos.current.x, tmpPos.current.y + 5, tmpPos.current.z + 10),
-        0.1
-      );
-      camera.lookAt(tmpPos.current);
-
-      // check exit
-      if (tmpPos.current.distanceTo(exitVec) < 1.2) onReach();
-    } catch (err) {
-      console.error("Player frame error:", err);
-    }
-  });
-
-  return (
-    <mesh ref={ref} castShadow>
-      <sphereGeometry args={[0.5, 32, 32]} />
-      <meshStandardMaterial color={COLORS.PLAYER} />
-    </mesh>
-  );
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Static Box Obstacle
-////////////////////////////////////////////////////////////////////////////////
-function Obstacle({ position }: { position: [number, number, number] }) {
-  const [ref] = useBox(() => ({
-    args: [1, 1, 1],
-    type: "Static",
-    position,
-  }));
-  return (
-    <mesh ref={ref} castShadow receiveShadow>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={COLORS.OBSTACLE} />
-    </mesh>
-  );
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Moving Bullet Sphere
-////////////////////////////////////////////////////////////////////////////////
-function Bullet({ position, direction, speed }: BulletConfig) {
-  const [ref, api] = useSphere(() => ({
-    mass: 1,
-    args: [0.2],
-    position,
-    velocity: [direction.x * speed, direction.y * speed, direction.z * speed],
-    userData: { type: "bullet" },
-  }));
-  const tmpPos = useRef(new THREE.Vector3());
-
-  useFrame(() => {
-    try {
-      ref.current!.getWorldPosition(tmpPos.current);
-      // despawn if far out of bounds
-      if (Math.abs(tmpPos.current.x) > 100 || Math.abs(tmpPos.current.z) > 100) {
-        api.position.set(Math.random() * 100, -10, Math.random() * 100);
-      }
-    } catch (err) {
-      console.error("Bullet frame error:", err);
-    }
-  });
-
-  return (
-    <mesh ref={ref} castShadow>
-      <sphereGeometry args={[0.2, 16, 16]} />
-      <meshStandardMaterial color={COLORS.BULLET} />
-    </mesh>
-  );
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Exit Portal Marker
-////////////////////////////////////////////////////////////////////////////////
-function Portal({ position }: { position: [number, number, number] }) {
-  return (
-    <mesh position={position}>
-      <torusGeometry args={[0.7, 0.2, 16, 100]} />
-      <meshStandardMaterial
-        color={COLORS.EXIT}
-        emissive={COLORS.EXIT}
-        emissiveIntensity={0.7}
-        transparent
-        opacity={0.9}
-      />
-    </mesh>
-  );
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Main Game Component
-////////////////////////////////////////////////////////////////////////////////
-export default function Game3D({
-  onGameOver,
-}: {
-  onGameOver: (times: number[]) => void;
-}) {
-  const [started, setStarted] = useState(false);
+export default function Game3D({ onGameOver }: { onGameOver: (times: number[]) => void }) {
+  const [phase, setPhase] = useState<"start" | "dungeon" | "level-complete" | "boss" | "game-complete" | "game-over">("start");
   const [level, setLevel] = useState(1);
   const [times, setTimes] = useState<number[]>([]);
   const [startTime, setStartTime] = useState(0);
+  const [shards, setShards] = useState(0);
+  const [twist, setTwist] = useState<{ label: string; key: string } | null>(null);
+  const [lastTime, setLastTime] = useState<number>(0);
+  const [lastShards, setLastShards] = useState<number>(0);
+  const [ballColor, setBallColor] = useState<string>("#FF6B8A");
+  const [gameOver, setGameOver] = useState(false);
+  const [gameVersion] = useState("v1.2.0");
 
-  const cfg: LevelConfig = generateLevelConfig(level);
+  const cfg = generateLevel(level);
 
-  const handleStart = () => {
-    setStarted(true);
+  const startRun = (color: string) => {
+    setBallColor(color);
+    const t = getRandomTwist(level);
+    setTwist(t);
+    setPhase("dungeon");
     setStartTime(Date.now());
   };
 
-  const handleReach = useCallback(() => {
+  const finishLevel = useCallback(() => {
     const elapsed = Date.now() - startTime;
-    setTimes((t) => [...t, elapsed]);
-    if (level >= 10) {
-      onGameOver([...times, elapsed]);
-    } else {
-      setLevel((l) => l + 1);
-      setStartTime(Date.now());
+    setTimes((arr) => [...arr, elapsed]);
+    const gained = Math.floor(Math.random() * 3 + 1) * (twist?.key === "double-loot" ? 2 : 1);
+    setShards((s) => s + gained);
+    setLastTime(elapsed);
+    setLastShards(gained);
+    setPhase("level-complete");
+  }, [startTime, twist]);
+
+  const nextLevel = () => {
+    if (level >= MAX_LEVEL) {
+      setPhase("game-complete");
+      onGameOver(times);
+      return;
     }
-  }, [level, startTime, times, onGameOver]);
+    setLevel((l) => l + 1);
+    const t = getRandomTwist(level + 1);
+    setTwist(t);
+    setPhase("dungeon");
+    setStartTime(Date.now());
+  };
+
+  const handleGameOver = useCallback(() => {
+    setGameOver(true);
+    setPhase("game-over");
+  }, []);
+
+  // Back button (bottom-left, always visible, high z-index)
+  const handleBack = () => {
+    window.history.back();
+  };
+
+  // Add a background scene for each level
+  function getSceneForLevel(level: number) {
+    // Alternate between water, forest, and mountain scenes
+    const scenes = [
+      // Water scene
+      (
+        <div
+          key="water"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            background:
+              "linear-gradient(to top, #6dd5ed 0%, #2193b0 60%, #e0eafc 100%)",
+          }}
+        >
+          <svg width="100%" height="100%" style={{ position: "absolute", bottom: 0, left: 0 }}>
+            <ellipse cx="50%" cy="98%" rx="60%" ry="8%" fill="#2193b0" opacity="0.5" />
+            <ellipse cx="60%" cy="99%" rx="40%" ry="5%" fill="#6dd5ed" opacity="0.4" />
+          </svg>
+        </div>
+      ),
+      // Forest scene
+      (
+        <div
+          key="forest"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            background:
+              "linear-gradient(to top, #a8e063 0%, #56ab2f 60%, #e0eafc 100%)",
+          }}
+        >
+          <svg width="100%" height="100%" style={{ position: "absolute", bottom: 0, left: 0 }}>
+            <ellipse cx="30%" cy="98%" rx="20%" ry="7%" fill="#56ab2f" opacity="0.5" />
+            <ellipse cx="70%" cy="99%" rx="25%" ry="6%" fill="#a8e063" opacity="0.4" />
+            {/* Simple trees */}
+            <rect x="20%" y="90%" width="2%" height="8%" fill="#7c5e3c" />
+            <circle cx="21%" cy="90%" r="5%" fill="#388e3c" />
+            <rect x="75%" y="92%" width="2%" height="6%" fill="#7c5e3c" />
+            <circle cx="76%" cy="92%" r="4%" fill="#388e3c" />
+          </svg>
+        </div>
+      ),
+      // Mountain scene
+      (
+        <div
+          key="mountain"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            background:
+              "linear-gradient(to top, #e0eafc 0%, #cfdef3 60%, #a1c4fd 100%)",
+          }}
+        >
+          <svg width="100%" height="100%" style={{ position: "absolute", bottom: 0, left: 0 }}>
+            <polygon points="10,100 40,60 70,100" fill="#b0bec5" opacity="0.7" />
+            <polygon points="60,100 80,70 100,100" fill="#78909c" opacity="0.6" />
+          </svg>
+        </div>
+      ),
+    ];
+    return scenes[(level - 1) % scenes.length];
+  }
 
   return (
-    <div className="w-full h-screen">
-      {!started && <StartScreen onStart={handleStart} />}
-      {started && (
-        <div className="absolute top-4 left-4 z-20 text-[#2E2B2B] font-semibold space-y-1">
-          <div>Level: {level} / 10</div>
-          <div>Time: {((Date.now() - startTime) / 1000).toFixed(1)}s</div>
+    <div className={`absolute inset-0 ${styles.daoDungeonBg}`} style={{overflow: 'hidden'}}>
+      {/* Back button (always visible) */}
+      <button
+        onClick={handleBack}
+        style={{ position: "fixed", bottom: 16, left: 16, zIndex: 50, background: "#FF6B8A", color: "#fff", borderRadius: 8, padding: "8px 18px", fontWeight: 600, boxShadow: "0 2px 8px #FF6B8A33", border: 0 }}
+      >
+        ← Back
+      </button>
+      {/* Show background scene only during gameplay (dungeon) */}
+      {phase === "dungeon" && getSceneForLevel(level)}
+      {phase === "dungeon" && (
+        <>
+          {twist && (
+            <div style={{ position: "fixed", top: 24, right: 24, zIndex: 40, background: "#FFD166", color: "#2E2B2B", borderRadius: 12, padding: "10px 22px", fontWeight: 700, fontSize: 18, boxShadow: "0 2px 8px #FFD16655" }}>
+              {twist.label}
+            </div>
+          )}
+          <TimerHUD time={Date.now() - startTime} />
+          <InventoryHUD shards={shards} />
+          <div className="absolute inset-0" style={{zIndex: 10}}>
+            <Dungeon cfg={cfg} onReachExit={finishLevel} twist={twist} ballColor={ballColor} onGameOver={handleGameOver} />
+          </div>
+        </>
+      )}
+      {/* Only show share/version UI on start, game-complete, and game-over screens */}
+      {(phase === "start" || phase === "game-complete" || phase === "game-over") && (
+        <div style={{ position: "fixed", bottom: 16, left: "50%", transform: "translateX(-50%)", zIndex: 60, display: "flex", gap: 16 }}>
+          <button
+            onClick={() => {
+              navigator.share ? navigator.share({ title: 'DAO Dungeon', text: `I scored ${shards} Soul Shards in DAO Dungeon!`, url: window.location.href }) : navigator.clipboard.writeText(window.location.href);
+            }}
+            style={{ background: "#FFD166", color: "#2E2B2B", borderRadius: 8, padding: "8px 18px", fontWeight: 600, boxShadow: "0 2px 8px #FFD16655", border: 0 }}
+          >
+            Share Shards
+          </button>
+          <span style={{ background: "#E5E1D8", color: "#2E2B2B", borderRadius: 8, padding: "8px 18px", fontWeight: 600, fontSize: 14, boxShadow: "0 2px 8px #E5E1D855" }}>
+            Game Version: {gameVersion}
+          </span>
         </div>
       )}
-
-      <Canvas shadows camera={{ position: [0, 5, 10], fov: 60 }}>
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 10, 7]} intensity={0.8} castShadow />
-
-        <Physics gravity={[0, -9.82, 0]}>
-          <Ground />
-          {started && (
-            <>
-              <Player exitPos={cfg.exit} onReach={handleReach} />
-
-              {cfg.obstacles.map((pos, i) => (
-                <Obstacle key={i} position={pos} />
-              ))}
-
-              {cfg.bullets.map((b, i) => (
-                <Bullet key={i} {...b} />
-              ))}
-
-              <Portal position={cfg.exit} />
-            </>
-          )}
-        </Physics>
-      </Canvas>
+      {phase === "start" && <StartScreen onStart={startRun} />}
+      {phase === "level-complete" && (
+        <div className="fixed inset-0 flex flex-col items-center justify-center z-40">
+          <div className={`${styles.daoDungeonCard} p-8 shadow-xl flex flex-col items-center`}>
+            <h2 className={`${styles.daoDungeonTitle} text-3xl mb-4`}>Level {level} Complete!</h2>
+            <p className="mb-2 text-lg">Time: <span className="font-bold">{(lastTime / 1000).toFixed(2)}s</span></p>
+            <p className="mb-2 text-lg">Shards Collected: <span className="font-bold">+{lastShards}</span></p>
+            {twist && <p className="mb-2 text-lg">Twist: <span className="font-bold">{twist.label}</span></p>}
+            <button className={styles.daoDungeonButton} onClick={nextLevel}>
+              {level === MAX_LEVEL ? "Finish Game" : "Next Level"}
+            </button>
+          </div>
+        </div>
+      )}
+      {phase === "game-complete" && (
+        <div className="fixed inset-0 flex flex-col items-center justify-center z-40">
+          <div className={`${styles.daoDungeonCard} p-8 shadow-xl flex flex-col items-center`}>
+            <h2 className={`${styles.daoDungeonTitle} text-3xl mb-4`}>Congratulations!</h2>
+            <p className="mb-2 text-lg">You completed all {MAX_LEVEL} levels!</p>
+            <p className="mb-2 text-lg">Total Time: <span className="font-bold">{(times.reduce((a, b) => a + b, 0) / 1000).toFixed(2)}s</span></p>
+            <p className="mb-2 text-lg">Total Shards: <span className="font-bold">{shards}</span></p>
+            <button className={styles.daoDungeonButton} onClick={() => window.location.reload()}>
+              Play Again
+            </button>
+          </div>
+        </div>
+      )}
+      {phase === "boss" && (
+        <div className="absolute inset-0">
+          <BossRoom level={level} onDefeat={finishLevel} />
+        </div>
+      )}
+      {phase === "game-over" && (
+        <div className="fixed inset-0 flex flex-col items-center justify-center z-50 bg-black/70 animate-fade-in">
+          <div className={`${styles.daoDungeonCard} p-8 shadow-xl flex flex-col items-center animate-fade-in`}>
+            <h2 className={`${styles.daoDungeonTitle} text-3xl mb-4`}>Game Over</h2>
+            <p className="mb-2 text-lg">Your ball became too small to continue!</p>
+            <p className="mb-2 text-lg">Total Shards: <span className="font-bold">{shards}</span></p>
+            <button className={styles.daoDungeonButton} onClick={() => window.location.reload()}>
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

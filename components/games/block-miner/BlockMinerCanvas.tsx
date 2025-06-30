@@ -6,7 +6,7 @@ import styles from './blockMiner.module.css'
 export function BlockMinerCanvas({
   canvasRef,
 }: {
-  canvasRef: RefObject<HTMLCanvasElement>
+  canvasRef: RefObject<HTMLCanvasElement | null>
 }) {
   return (
     <canvas

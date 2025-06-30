@@ -18,7 +18,7 @@ import {
 } from './constants'
 import { createCoin, getRandomFact } from './utils'
 
-export function useBlockMinerGame(canvasRef: RefObject<HTMLCanvasElement>) {
+export function useBlockMinerGame(canvasRef: RefObject<HTMLCanvasElement | null>) {
   // bucket position
   const [bucketX, setBucketX] = useState((CANVAS_WIDTH - BUCKET_WIDTH) / 2)
   // coins

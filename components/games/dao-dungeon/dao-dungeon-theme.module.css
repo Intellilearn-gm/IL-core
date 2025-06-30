@@ -1,0 +1,49 @@
+.daoDungeonBg {
+  background: linear-gradient(135deg, #FFE8D6, #FFF1CC);
+  min-height: 100vh;
+}
+
+.daoDungeonCard {
+  background: #FFE8D6;
+  border: 2px solid #E5E1D8;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px 0 #E5E1D8;
+  color: #2E2B2B;
+}
+
+.daoDungeonTitle {
+  color: #FF6B8A;
+  font-weight: bold;
+}
+
+.daoDungeonButton {
+  background: #FF6B8A;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 2rem;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.daoDungeonButton:hover {
+  background: #FF3D4A;
+}
+
+.daoDungeonSecondary {
+  background: #FFA45C;
+  color: #2E2B2B;
+}
+.daoDungeonSecondary:hover {
+  background: #FFD166;
+}
+
+.daoDungeonBadge {
+  background: #FFD166;
+  color: #2E2B2B;
+  border-radius: 999px;
+  padding: 0.25rem 1rem;
+  font-weight: bold;
+}
+
+.daoDungeonTextMuted {
+  color: #7D7A75;
+} 
