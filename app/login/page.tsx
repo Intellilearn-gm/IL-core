@@ -1,28 +1,41 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useOCAuth } from "@opencampus/ocid-connect-js"
+import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Wallet, Sparkles, Shield, Trophy, BookOpen, Coins, Users, Globe, Lock, Play } from "lucide-react"
 import ProfessionalBackground from "@/components/professional-background"
 
-interface LoginPageProps {
-  onLogin: () => void
-}
+export default function LoginPage() {
+  const auth = useOCAuth(); // Get the whole object
+  const [isConnecting, setIsConnecting] = useState(false);
 
-export default function LoginPage({ onLogin }: LoginPageProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  // Redirect if already logged in
+  useEffect(() => {
+    if (auth && auth.isInitialized && auth.authState.isAuthenticated) {
+      redirect('/dashboard')
+    }
+  }, [auth]);
 
   const handleLogin = async () => {
-    console.log('Login button clicked, starting login process...')
-    setIsLoading(true)
-    // Simulate login process
-    setTimeout(() => {
-      console.log('Login timeout completed, calling onLogin...')
-      setIsLoading(false)
-      onLogin()
-    }, 2000)
+    if (!auth || !auth.ocAuth) {
+      console.error("OCID Auth not ready")
+      alert("Authentication service is not ready. Please try again in a moment.")
+      return
+    }
+    setIsConnecting(true)
+    try {
+      await auth.ocAuth.signInWithRedirect()
+    } catch (error) {
+      console.error("Failed to initiate OCID login:", error)
+      setIsConnecting(false)
+      alert("Failed to start the login process. Please check the console for details.")
+    }
   }
+
+  const isLoading = !auth || !auth.isInitialized || isConnecting;
 
   const features = [
     { icon: BookOpen, title: "Learn", description: "Master blockchain concepts through interactive courses" },
@@ -38,18 +51,22 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     { value: "99.9%", label: "Uptime" },
   ]
 
+  // Render a loading state while the SDK initializes
+  if (!auth || !auth.isInitialized) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FFE8D6] via-[#FFF1CC] to-[#FFE8D6]">
+            Initializing...
+        </div>
+    )
+  }
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#FFE8D6] via-[#FFF1CC] to-[#FFE8D6]">
       <ProfessionalBackground />
-
-      {/* Semi-transparent overlay for better readability */}
       <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
-
       <div className="relative z-10 min-h-screen flex">
-        {/* Left Side - Features & Branding */}
         <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 xl:px-16">
           <div className="max-w-lg">
-            {/* Logo and Branding */}
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#FF6B8A] to-[#FFA45C] rounded-xl flex items-center justify-center shadow-lg">
@@ -62,8 +79,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 Join thousands of learners earning while mastering Web3 technologies through our gamified platform.
               </p>
             </div>
-
-            {/* Key Features */}
             <div className="grid grid-cols-2 gap-4 mb-8">
               {features.map((feature, index) => (
                 <div
@@ -80,15 +95,10 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 </div>
               ))}
             </div>
-
-            {/* Platform Stats */}
           </div>
         </div>
-
-        {/* Right Side - Login Form */}
         <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
           <div className="w-full max-w-md">
-            {/* Mobile Logo */}
             <div className="lg:hidden text-center mb-8">
               <div className="inline-flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#FF6B8A] to-[#FFA45C] rounded-xl flex items-center justify-center shadow-lg">
@@ -98,20 +108,13 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               </div>
               <p className="text-slate-600">The Future of Blockchain Education</p>
             </div>
-
-            {/* Login Card */}
             <div className="relative">
-              {/* Subtle glow effect */}
               <div className="absolute -inset-1 bg-gradient-to-r from-[#FF6B8A]/20 to-[#FFA45C]/20 rounded-2xl blur-xl opacity-60"></div>
-
-              {/* Main card */}
               <div className="relative bg-white/80 backdrop-blur-xl border border-white/60 rounded-2xl p-8 shadow-2xl">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome Back</h2>
                   <p className="text-slate-600">Connect your wallet to continue learning</p>
                 </div>
-
-                {/* Web3 Badges */}
                 <div className="flex flex-wrap gap-2 justify-center mb-6">
                   <Badge variant="secondary" className="bg-[#FFE8D6] text-[#FF6B8A] border-[#FF6B8A]/30">
                     <Shield className="w-3 h-3 mr-1" />
@@ -126,8 +129,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                     Earn Rewards
                   </Badge>
                 </div>
-
-                {/* Login Button */}
                 <Button
                   onClick={handleLogin}
                   disabled={isLoading}
@@ -145,8 +146,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                     </div>
                   )}
                 </Button>
-
-                {/* Security Features */}
                 <div className="mt-6 space-y-3">
                   <div className="flex items-center gap-3 text-slate-600 text-sm">
                     <Lock className="w-4 h-4 text-[#FF6B8A]" />
@@ -161,8 +160,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                     <span>Start earning tokens immediately</span>
                   </div>
                 </div>
-
-                {/* Terms */}
                 <div className="mt-6 text-center">
                   <p className="text-xs text-slate-500">
                     By connecting, you agree to our{" "}
@@ -177,8 +174,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 </div>
               </div>
             </div>
-
-            {/* Additional Info for Mobile */}
             <div className="lg:hidden mt-8 text-center">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 {stats.map((stat, index) => (

@@ -3,6 +3,7 @@ import './globals.css'
 import { Providers } from '@/lib/providers'
 import { ProfileProvider } from "@/lib/profile"
 import { Analytics } from "@vercel/analytics/next"
+import { OcidProvider } from '@/lib/ocid-provider'
 
 
 export const metadata: Metadata = {
@@ -83,10 +84,12 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          <ProfileProvider>
-            <Analytics />
-            {children}
-          </ProfileProvider>
+          <OcidProvider>
+            <ProfileProvider>
+              <Analytics />
+              {children}
+            </ProfileProvider>
+          </OcidProvider>
         </Providers>
       </body>
     </html>
