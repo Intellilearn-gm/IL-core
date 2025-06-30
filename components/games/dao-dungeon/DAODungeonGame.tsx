@@ -1,29 +1,30 @@
 // components/games/dao-dungeon/DAODungeonGame.tsx
-'use client'
+"use client";
 
-import { useRef } from 'react'
-import { useDAODungeonGame } from './useDAODungeonGame'
-import styles from './daodungeon.module.css'
-import { initialMap, tileSize } from './constants'
-
+import { useRef, useEffect, useState } from "react";
+import { useDAODungeonGame } from "./useDAODungeonGame";
+import styles from "./daodungeon.module.css";
 
 export default function DAODungeonGame() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  useDAODungeonGame(canvasRef)
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useDAODungeonGame(canvasRef);
+
+  const [level, setLevel] = useState(1);
+  const [elapsed, setElapsed] = useState(0);
+
+  // simple timer update
+  useEffect(() => {
+    const id = setInterval(() => setElapsed((e) => e + 100), 100);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>DAO Dungeon Escape</h1>
-      <canvas
-        ref={canvasRef}
-        width={initialMap[0].length * tileSize}
-        height={initialMap.length * tileSize}
-        className={styles.canvas}
-      />
-      <div className={styles.info}>
-        <p>Use the arrow keys to navigate the dungeon.</p>
-        <p>Collect all tokens to unlock the door and escape!</p>
+      <div className={styles.hud}>
+        <div>Level: {level} / 10</div>
+        <div>Time: {(elapsed / 1000).toFixed(1)}s</div>
       </div>
+      <canvas ref={canvasRef} className={styles.canvas} />
     </div>
-  )
+  );
 }

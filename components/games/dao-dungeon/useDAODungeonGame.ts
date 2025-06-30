@@ -1,135 +1,188 @@
 // components/games/dao-dungeon/useDAODungeonGame.ts
-'use client'
+"use client";
 
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { initialMap, tileSize } from './constants'
+import { useEffect, useRef } from "react";
+import {
+  generateMap,
+  tileSize,
+  COLORS,
+  MAX_LEVEL,
+} from "./constants";
+
+interface GameState {
+  level: number;
+  map: number[][];
+  playerX: number;
+  playerY: number;
+  tokensLeft: number;
+  startTime: number;
+  times: number[]; // ms for each completed level
+  tokensCollected: number;
+}
 
 export function useDAODungeonGame(canvasRef: React.RefObject<HTMLCanvasElement>) {
-  const [playerPos, setPlayerPos] = useState({ x: 1, y: 1 })
-  const [map, setMap] = useState<number[][]>(initialMap)
-  const [score, setScore] = useState(0)
-  const [totalTokens, setTotalTokens] = useState(0)
-  const [doorUnlocked, setDoorUnlocked] = useState(false)
-  const [gameWon, setGameWon] = useState(false)
+  const state = useRef<GameState>({
+    level: 1,
+    map: generateMap(1),
+    playerX: 1,
+    playerY: 1,
+    tokensLeft: 0,
+    startTime: Date.now(),
+    times: [],
+    tokensCollected: 0,
+  });
 
-  // Count tokens once
+  // initialize tokensLeft
   useEffect(() => {
-    let count = 0
-    for (const row of initialMap) {
-      row.forEach(cell => { if (cell === 2) count++ })
+    state.current.tokensLeft = state.current.map.flat().filter((c) => c === 2).length;
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    function draw() {
+      const { map, playerX, playerY } = state.current;
+      const rows = map.length;
+      const cols = map[0].length;
+      canvas.width = cols * tileSize;
+      canvas.height = rows * tileSize;
+
+      // draw map
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const cell = map[y][x];
+          switch (cell) {
+            case 1:
+              ctx.fillStyle = COLORS.WALL;
+              break;
+            case 2:
+              ctx.fillStyle = COLORS.TOKEN;
+              break;
+            case 3:
+              ctx.fillStyle = COLORS.EXIT;
+              break;
+            case 4:
+              ctx.fillStyle = COLORS.TRAP;
+              break;
+            default:
+              ctx.fillStyle = COLORS.FLOOR;
+          }
+          ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        }
+      }
+
+      // draw player
+      ctx.fillStyle = COLORS.PLAYER;
+      ctx.beginPath();
+      ctx.arc(
+        playerX * tileSize + tileSize / 2,
+        playerY * tileSize + tileSize / 2,
+        tileSize / 2 - 2,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
     }
-    setTotalTokens(count)
-  }, [])
 
-  // Handle keyboard movement
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameWon) return
+    function handleKey(e: KeyboardEvent) {
+      const s = state.current;
+      let nx = s.playerX;
+      let ny = s.playerY;
+      if (e.key === "ArrowUp") ny--;
+      if (e.key === "ArrowDown") ny++;
+      if (e.key === "ArrowLeft") nx--;
+      if (e.key === "ArrowRight") nx++;
+      if (nx < 0 || ny < 0 || ny >= s.map.length || nx >= s.map[0].length)
+        return;
 
-      let newX = playerPos.x
-      let newY = playerPos.y
-      if (e.key === 'ArrowUp') newY--
-      if (e.key === 'ArrowDown') newY++
-      if (e.key === 'ArrowLeft') newX--
-      if (e.key === 'ArrowRight') newX++
+      const cell = s.map[ny][nx];
+      // wall
+      if (cell === 1) return;
 
-      // Boundary check
-      if (newY < 0 || newY >= map.length || newX < 0 || newX >= map[0].length)
-        return
+      // trap
+      if (cell === 4) {
+        alert("You hit a trap! Restarting level…");
+        resetLevel();
+        draw();
+        return;
+      }
 
-      const cell = map[newY][newX]
-      if (cell === 1) return          // wall
-      if (cell === 3 && !doorUnlocked) return // locked door
+      // move
+      s.playerX = nx;
+      s.playerY = ny;
 
-      // Move
-      setPlayerPos({ x: newX, y: newY })
-
-      // Collect token
+      // token
       if (cell === 2) {
-        setScore(s => s + 1)
-        setMap(m => {
-          const copy = m.map(r => r.slice())
-          copy[newY][newX] = 0
-          return copy
-        })
+        s.tokensCollected++;
+        s.tokensLeft--;
+        s.map[ny][nx] = 0;
       }
 
-      // Win on door if unlocked
-      if (cell === 3 && doorUnlocked) {
-        setGameWon(true)
+      // exit
+      if (cell === 3 && s.tokensLeft === 0) {
+        // complete level
+        const now = Date.now();
+        const duration = now - s.startTime;
+        s.times.push(duration);
+        if (s.level === MAX_LEVEL) {
+          // game over
+          setTimeout(() => showSummary(), 100);
+          return;
+        }
+        // next level
+        s.level++;
+        loadLevel(s.level);
       }
+
+      draw();
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [playerPos, map, doorUnlocked, gameWon])
-
-  // Unlock door when all tokens collected
-  useEffect(() => {
-    if (score >= totalTokens && totalTokens > 0) {
-      setDoorUnlocked(true)
-    }
-  }, [score, totalTokens])
-
-  // Draw function
-  const drawGame = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    // Draw grid
-    for (let y = 0; y < map.length; y++) {
-      for (let x = 0; x < map[0].length; x++) {
-        const cell = map[y][x]
-        let color = '#e0e0e0'         // floor
-        if (cell === 1) color = '#555'   // wall
-        if (cell === 2) color = '#FFD700'// token
-        if (cell === 3) color = doorUnlocked ? '#0a0' : '#d00'
-
-        ctx.fillStyle = color
-        ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize)
-        ctx.strokeStyle = '#000'
-        ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize)
-      }
+    function resetLevel() {
+      const lvl = state.current.level;
+      state.current.map = generateMap(lvl);
+      state.current.playerX = 1;
+      state.current.playerY = 1;
+      state.current.tokensLeft = state.current.map
+        .flat()
+        .filter((c) => c === 2).length;
+      state.current.startTime = Date.now();
     }
 
-    // Draw player
-    ctx.fillStyle = '#7289da'
-    ctx.fillRect(
-      playerPos.x * tileSize,
-      playerPos.y * tileSize,
-      tileSize,
-      tileSize
-    )
-
-    // Status text
-    ctx.fillStyle = '#000'
-    ctx.font = '20px Arial'
-    ctx.fillText(`Tokens: ${score} / ${totalTokens}`, 10, canvas.height - 10)
-
-    // Win message
-    if (gameWon) {
-      ctx.fillStyle = '#0a0'
-      ctx.font = '30px Arial'
-      ctx.fillText(
-        'Congratulations! You Escaped the Dungeon!',
-        50,
-        canvas.height / 2
-      )
+    function loadLevel(lvl: number) {
+      state.current.map = generateMap(lvl);
+      state.current.playerX = 1;
+      state.current.playerY = 1;
+      state.current.tokensLeft = state.current.map
+        .flat()
+        .filter((c) => c === 2).length;
+      state.current.startTime = Date.now();
+      draw();
     }
-  }, [map, playerPos, score, totalTokens, doorUnlocked, gameWon])
 
-  // Animation loop
-  useEffect(() => {
-    let id = requestAnimationFrame(function render() {
-      drawGame()
-      id = requestAnimationFrame(render)
-    })
-    return () => cancelAnimationFrame(id)
-  }, [drawGame])
+    function showSummary() {
+      const times = state.current.times;
+      let msg = "🏆 You’ve escaped all dungeons!\n\n";
+      times.forEach((t, i) => {
+        msg += `Level ${i + 1}: ${(t / 1000).toFixed(2)}s\n`;
+      });
+      msg += `\nTokens Collected: ${state.current.tokensCollected}\n`;
+      alert(msg);
+      // restart game
+      state.current.level = 1;
+      state.current.times = [];
+      state.current.tokensCollected = 0;
+      loadLevel(1);
+    }
 
-  // Nothing to return — hook drives the canvas
+    window.addEventListener("keydown", handleKey);
+    loadLevel(state.current.level);
+    draw();
+
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [canvasRef]);
 }
