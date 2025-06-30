@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from '@/lib/providers'
 import { ProfileProvider } from "@/lib/profile"
+import { Analytics } from "@vercel/analytics/next"
+
 
 export const metadata: Metadata = {
   title: 'IntelliLearn - The Future of Blockchain Learning',
@@ -82,6 +84,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <ProfileProvider>
+            <Analytics />
             {children}
           </ProfileProvider>
         </Providers>
