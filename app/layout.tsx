@@ -4,6 +4,7 @@ import { Providers } from '@/lib/providers'
 import { ProfileProvider } from "@/lib/profile"
 
 
+
 export const metadata: Metadata = {
   title: 'IntelliLearn',
   description: 'New way to learn and earn',
