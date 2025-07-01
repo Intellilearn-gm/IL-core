@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
 import { Button } from '@/components/ui/button'
 import { log } from 'console'
+import Image from 'next/image'
 
 export default function DashboardHeader() {
   const { ocAuth } = useOCAuth()
@@ -23,8 +24,14 @@ const handleLogout = () => {
     <nav className="backdrop-blur-xl bg-white/20 border-b border-white/30 px-6 py-4 shadow-lg">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#FF6B8A] to-[#FFA45C] rounded-lg flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-lg">IL</span>
+          <div className="w-10 h-10 bg-gradient-to-br from-[#FF6B8A] to-[#FFA45C] rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
+            <Image 
+              src="/favicon-32x32.png" 
+              alt="IntelliLearn Logo" 
+              width={32} 
+              height={32}
+              className="w-8 h-8"
+            />
           </div>
           <h1 className="text-2xl font-bold text-[#2E2B2B]">IntelliLearn</h1>
         </div>
