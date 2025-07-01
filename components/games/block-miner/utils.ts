@@ -12,7 +12,20 @@ import {
     return Math.random() * (max - min) + min
   }
   
-  export function createCoin() {
+  export type PowerType = 'time' | 'fast' | 'big';
+  export interface Coin {
+    x: number;
+    y: number;
+    radius: number;
+    speedY: number;
+    rotation: number;
+    rotationSpeed: number;
+    isNegative?: boolean;
+    isPower?: boolean;
+    powerType?: PowerType;
+  }
+  
+  export function createCoin(): Coin {
     return {
       x: randomRange(COIN_RADIUS, CANVAS_WIDTH - COIN_RADIUS),
       y: randomRange(-CANVAS_HEIGHT, 0),
@@ -21,6 +34,7 @@ import {
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed:
         COIN_BASE_ROTATION + (Math.random() - 0.5) * COIN_ROTATION_VARIATION * 2,
+      isNegative: false,
     }
   }
   
