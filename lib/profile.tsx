@@ -5,6 +5,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { useAddress } from "@thirdweb-dev/react";
 import { supabase } from "./supabaseClient";
 import ProfileSetupCard from "@/components/ProfileSetupCard";
+import { usePathname } from "next/navigation";
 
 interface Profile {
   wallet_address: string;
@@ -36,6 +37,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const pathname = usePathname();
 
   const fetchProfile = useCallback(async (walletAddress: string) => {
     if (!walletAddress) return;
@@ -101,7 +103,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   return (
     <ProfileContext.Provider value={{ profile, loading, refreshProfile }}>
       {children}
-      {address && showProfileSetup && (
+      {address && showProfileSetup && pathname !== "/login" && (
         <ProfileSetupCard
           isOpen={showProfileSetup}
           walletAddress={address}
