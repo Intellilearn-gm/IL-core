@@ -45,7 +45,7 @@ export function useDailyActivity(address: string | undefined) {
               games_played: 0,
               tokens_earned: 0,
             },
-            { onConflict: ["wallet_address", "activity_date"] }
+            { onConflict: "wallet_address,activity_date" }
           );
         if (upsertErr) {
           console.error("Failed to upsert today's activity", upsertErr);
@@ -77,7 +77,7 @@ export function useDailyActivity(address: string | undefined) {
           const earned = rec?.tokens_earned ?? 0;
           days.push({
             date: d,
-            hasActivity: played > 0 || earned > 0 || dStr === todayStr, // today always counts
+            hasActivity: !!rec, // Only true if there is a record for this day
             gamesPlayed: played,
             tokensEarned: earned,
             isToday: dStr === todayStr,
@@ -88,9 +88,15 @@ export function useDailyActivity(address: string | undefined) {
 
         // 4) Compute current streak
         let streak = 0;
+        // Start from today, go backwards
         for (let i = days.length - 1; i >= 0; i--) {
-          if (days[i].hasActivity) streak++;
-          else break;
+          if (days[i].hasActivity) {
+            streak++;
+          } else {
+            // If today is not active, streak is 0
+            // If any previous day is not active, streak breaks
+            break;
+          }
         }
         setCurrentStreak(streak);
 
