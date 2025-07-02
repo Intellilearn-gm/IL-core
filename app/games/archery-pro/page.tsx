@@ -25,7 +25,7 @@ export default function ArcheryPage() {
         <header className="backdrop-blur-xl bg-white/10 border-b border-white/20 px-6 py-4 flex justify-between items-center">
           <Button size="sm" variant="outline" asChild>
             <Link href="/dashboard">
-              <ArrowLeft className="mr-2" />
+              <ArrowLeft />
               Back
             </Link>
           </Button>
@@ -34,7 +34,7 @@ export default function ArcheryPage() {
 
           <Button size="sm" variant="outline" asChild>
             <Link href="/dashboard">
-              <X className="mr-2" />
+              <X />
               Quit
             </Link>
           </Button>
