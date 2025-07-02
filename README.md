@@ -59,12 +59,15 @@ Try this mini-game right in your README! Click the buttons below to simulate lea
 | Metric | Value | Trend |
 |:---:|:---:|:---:|
 | 🎮 **Active Games** | 4 | 📈 |
-| 👥 **Active Learners** | 50K+ | 🚀 |
-| 📚 **Courses Available** | 100+ | 📊 |
-| 🪙 **Tokens Distributed** | 1M+ | 💰 |
+| 👥 **Active Learners** | 10+ | 🚀 |
+| 📚 **Courses Available** | 1+ | 📊 |
+| 🪙 **Tokens Distributed** | - | 💰 |
 | ⚡ **Uptime** | 99.9% | 🔥 |
 
 </div>
+
+## Open Campus Tasks :
+-- Design user persona of your top users and take intervews - [Notion Interviews](https://fish-danger-0c8.notion.site/224a690956ce805ba17cfa03e1c7f161?v=224a690956ce80c69f98000cb7eba4d4&source=copy_link)
 
 ## 🎯 Our Games
 
