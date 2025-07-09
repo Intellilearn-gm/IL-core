@@ -68,6 +68,8 @@ Try this mini-game right in your README! Click the buttons below to simulate lea
 
 ## Open Campus Tasks :
 -- Design user persona of your top users and take intervews - [Notion Interviews](https://fish-danger-0c8.notion.site/224a690956ce805ba17cfa03e1c7f161?v=224a690956ce80c69f98000cb7eba4d4&source=copy_link)
+-- IntelliLearn TRD - [IntelliLearn TRD](https://fish-danger-0c8.notion.site/IntelliLearn-TRD-228a690956ce804c8d93deb39b84f03b?source=copy_link)
+-- IntelliLearn PSD - [IntelliLearn PSD](https://fish-danger-0c8.notion.site/IntelliLearn-PSD-228a690956ce80478f45d78a32e35d71?source=copy_link)
 
 ## 🎯 Our Games
 
