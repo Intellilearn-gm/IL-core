@@ -70,6 +70,8 @@ Try this mini-game right in your README! Click the buttons below to simulate lea
 * Design user persona of your top users and take intervews - [Notion Interviews](https://fish-danger-0c8.notion.site/224a690956ce805ba17cfa03e1c7f161?v=224a690956ce80c69f98000cb7eba4d4&source=copy_link)
 * IntelliLearn TRD - [IntelliLearn TRD](https://fish-danger-0c8.notion.site/IntelliLearn-TRD-228a690956ce804c8d93deb39b84f03b?source=copy_link)
 * IntelliLearn PSD - [IntelliLearn PSD](https://fish-danger-0c8.notion.site/IntelliLearn-PSD-228a690956ce80478f45d78a32e35d71?source=copy_link)
+* Intellilearn Business Model - [Intellilearn Business Model](https://fish-danger-0c8.notion.site/Intellilearn-Business-Model-22ba690956ce807eb349d3ccf12d05db?source=copy_link)
+*  Intellilearn Innovation mission map - [ Intellilearn Innovation mission map](https://fish-danger-0c8.notion.site/Intellilearn-Innovation-mission-map-22ba690956ce80d1ae2fdc4a34d0a3b3?source=copy_link)
 
 ## 🎯 Our Games
 
