@@ -167,7 +167,7 @@ export default function SnapcardPage() {
               ))}
             </div>
             {notification && (
-              <SnapcardNotification message={notification} />
+              <SnapcardNotification message={notification} onClose={() => setNotification(null)} />
             )}
             {error && (
               <div className="bg-red-100 text-red-700 rounded-lg p-4 mb-4 font-semibold text-center">{error}</div>
