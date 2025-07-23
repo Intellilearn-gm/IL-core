@@ -11,7 +11,7 @@ import SnapcardCreate from '@/components/games/snapcard/SnapcardCreate';
 import SnapcardRequests from '@/components/games/snapcard/SnapcardRequests';
 import SnapcardCompleted from '@/components/games/snapcard/SnapcardCompleted';
 import SnapcardNotification from '@/components/games/snapcard/SnapcardNotification';
-import { getUserSnapcards, getSnapRequests, getProfileByWallet } from '@/lib/snapcard/supabaseSnapcard';
+import { getUserSnapcards, getSnapRequests, getProfileByWallet, getSnapcardResponses, getDirectSnapRequests } from '@/lib/snapcard/supabaseSnapcard';
 
 const TABS = [
   { key: 'create', label: '✨ Create Snapcard' },
@@ -34,34 +34,49 @@ export default function SnapcardPage() {
     if (!address) return;
     setLoading(true);
     setError(null);
-    Promise.all([
-      getSnapRequests(address),
-      getUserSnapcards(address),
-      getProfileByWallet(address),
-    ])
-      .then(([reqs, comps, profile]) => {
-        setRequests(reqs || []);
-        setCompleted(
-          (comps || []).map((snap: any) => ({
-            id: snap.id,
-            link_token: snap.link_token,
-            questions: snap.questions || [],
-            recipient_username: '', // You can fill this if you have recipient info
-            status: 'completed', // Assume completed for created
-          }))
+    (async () => {
+      try {
+        const profile = await getProfileByWallet(address);
+        const [publicReqs, directReqs, comps] = await Promise.all([
+          getSnapRequests(address),
+          getDirectSnapRequests({ wallet_address: address, username: profile?.username }),
+          getUserSnapcards(address),
+        ]);
+        // Merge and dedupe requests
+        const allRequests = [
+          ...(publicReqs || []),
+          ...(directReqs || []),
+        ];
+        setRequests(allRequests);
+        // For each created snapcard, fetch responses to determine status
+        const completedWithStatus = await Promise.all(
+          (comps || []).map(async (snap: any) => {
+            const responses = await getSnapcardResponses(snap.id);
+            return {
+              id: snap.id,
+              link_token: snap.link_token,
+              questions: snap.questions || [],
+              recipient_username: '',
+              status: responses && responses.length > 0 ? 'completed' : 'pending',
+            };
+          })
         );
+        setCompleted(completedWithStatus);
         setFilled(
-          (reqs || []).map((req: any) => ({
+          (publicReqs || []).map((req: any) => ({
             id: req.snapcards?.id || req.id,
             link_token: req.snapcards?.link_token,
             questions: req.snapcards?.questions || [],
             responder_name: profile?.username || '',
-            status: 'completed', // Assume completed for filled
+            status: 'completed',
           }))
         );
-      })
-      .catch((e) => setError(e.message || 'Failed to load data'))
-      .finally(() => setLoading(false));
+      } catch (e: any) {
+        setError(e.message || 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [address]);
 
   return (
