@@ -13,7 +13,7 @@ export function OcidProvider({ children }: { children: React.ReactNode }) {
   // 2️⃣  Browser only ⇒ it’s safe to touch `window`
   const ocidOpts = {
     redirectUri: `${window.location.origin}/auth/callback`,
-    // clientId: process.env.NEXT_PUBLIC_OCID_CLIENT_ID  // <-- only if you’re on prod
+    clientId: process.env.NEXT_PUBLIC_OCID_CLIENT_ID
   }
 
   return (

@@ -7,17 +7,26 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Wallet, Sparkles, Shield, Trophy, BookOpen, Coins, Users, Globe, Lock, Play } from "lucide-react"
 import ProfessionalBackground from "@/components/professional-background"
+import { useAddress, ConnectWallet } from '@thirdweb-dev/react'
+import { useRouter } from 'next/navigation'
+
+// Feature flag to enable/disable wallet login manually
+const ENABLE_WALLET_LOGIN = true;
 
 export default function LoginPage() {
   const auth = useOCAuth(); // Get the whole object
   const [isConnecting, setIsConnecting] = useState(false);
+  const [ocidErrorCount, setOcidErrorCount] = useState(0);
+  const [walletLoginEnabled, setWalletLoginEnabled] = useState(ENABLE_WALLET_LOGIN);
+  const address = useAddress();
+  const router = useRouter();
 
-  // Redirect if already logged in
+  // Redirect if already logged in with OCID or wallet
   useEffect(() => {
-    if (auth && auth.isInitialized && auth.authState.isAuthenticated) {
-      redirect('/dashboard')
+    if ((auth && auth.isInitialized && auth.authState.isAuthenticated) || address) {
+      router.replace('/dashboard');
     }
-  }, [auth]);
+  }, [auth, address, router]);
 
   const handleLogin = async () => {
     if (!auth || !auth.ocAuth) {
@@ -31,6 +40,11 @@ export default function LoginPage() {
     } catch (error) {
       console.error("Failed to initiate OCID login:", error)
       setIsConnecting(false)
+      setOcidErrorCount((count) => {
+        const newCount = count + 1;
+        if (newCount > 1) setWalletLoginEnabled(true);
+        return newCount;
+      });
       alert("Failed to start the login process. Please check the console for details.")
     }
   }
@@ -182,6 +196,15 @@ export default function LoginPage() {
                     </div>
                   )}
                 </Button>
+                {/* Alternative Wallet Login Button */}
+                {walletLoginEnabled && (
+                  <div className="mt-4">
+                    <ConnectWallet
+                      btnTitle="Login with Wallet"
+                      className="w-full h-14 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] hover:from-[#FF3D4A] hover:to-[#FF6B8A] text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border-0"
+                    />
+                  </div>
+                )}
                 <div className="mt-6 space-y-3">
                   <div className="flex items-center gap-3 text-slate-600 text-sm">
                     <Lock className="w-4 h-4 text-[#FF6B8A]" />

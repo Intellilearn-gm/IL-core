@@ -60,15 +60,15 @@ const LoadingScreen = () => (
 
 export default function DashboardPage() {
   const auth = useOCAuth(); // Get the whole object first
+  const address = useAddress();
 
-  // Redirect if auth is initialized and user is not authenticated
+  // Redirect if both OCID and wallet are unauthenticated
   useEffect(() => {
-    if (auth && auth.isInitialized && !auth.authState.isAuthenticated) {
+    if (auth && auth.isInitialized && !auth.authState.isAuthenticated && !address) {
       redirect('/login');
     }
-  }, [auth]);
+  }, [auth, address]);
 
-  const address = useAddress();
   const { profile, loading } = useProfile(address || "");
   const {
     streakData,
@@ -94,8 +94,8 @@ export default function DashboardPage() {
     }
   }, [address, loading, profile]);
 
-  // Main loading condition: Wait for the OCID SDK to be ready.
-  if (!auth || !auth.isInitialized || !auth.authState.isAuthenticated) {
+  // Main loading condition: Wait for the OCID SDK to be ready, unless wallet is connected.
+  if (!auth || !auth.isInitialized || (!auth.authState.isAuthenticated && !address)) {
     return <LoadingScreen />;
   }
 

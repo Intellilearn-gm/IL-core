@@ -3,7 +3,7 @@
 import React from 'react'
 import { useOCAuth } from '@opencampus/ocid-connect-js'
 import { useRouter } from 'next/navigation'
-import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
+import { ConnectWallet, useAddress, useDisconnect } from '@thirdweb-dev/react'
 import { Button } from '@/components/ui/button'
 import { log } from 'console'
 import Image from 'next/image'
@@ -12,12 +12,12 @@ export default function DashboardHeader() {
   const { ocAuth } = useOCAuth()
   const address = useAddress()
   const router = useRouter()
+  const disconnect = useDisconnect();
 
-const handleLogout = () => {
-  console.log('======',`${window.location.origin}/login`)
-  ocAuth.logout(`${window.location.origin}/login`);   // single string param
-};
-
+  const handleLogout = () => {
+    disconnect();
+    ocAuth.logout(`${window.location.origin}/login`);
+  };
 
 
   return (

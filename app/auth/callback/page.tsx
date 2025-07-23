@@ -46,11 +46,11 @@ const Loading = () => (
   </div>
 )
 
-const ErrorComponent = ({ error }: { error?: Error }) => (
+const ErrorComponent = ({ message }: { message?: string }) => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#FF6B8A] to-[#FFD166] text-white relative overflow-hidden">
     <div className="text-6xl mb-4 animate-bounce">❌</div>
     <h2 className="text-2xl font-bold mb-2 drop-shadow">Login Failed</h2>
-    <p className="text-lg mb-4">{error?.message || 'An unknown error occurred.'}</p>
+    <p className="text-lg mb-4">{message || 'An unknown error occurred.'}</p>
     <p className="text-sm text-white/70">Redirecting you back to login...</p>
     {/* Fun background sparkles */}
     <div className="pointer-events-none absolute inset-0 z-0">
@@ -73,6 +73,8 @@ export default function AuthCallbackPage() {
   const router = useRouter()
   // We use the same isClient pattern to delay rendering of LoginCallBack
   const [isClient, setIsClient] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [rawError, setRawError] = useState<any>(null)
 
   useEffect(() => {
     setIsClient(true)
@@ -83,8 +85,18 @@ export default function AuthCallbackPage() {
     router.replace('/dashboard')
   }
 
-  const onError = (err: Error) => {
-    console.error("OCID Callback Error:", err)
+  const onError = (err: unknown) => {
+    console.error("OCID Callback Error (full object):", err)
+    setRawError(err)
+    let message = "An unknown error occurred."
+    if (err instanceof Error) {
+      message = err.message
+    } else if (typeof err === "string") {
+      message = err
+    } else if (err && typeof err === "object" && "message" in err) {
+      message = (err as any).message
+    }
+    setErrorMessage(message)
     // Redirect back to the login page after a short delay
     setTimeout(() => router.replace('/login'), 3000)
   }
@@ -95,13 +107,26 @@ export default function AuthCallbackPage() {
     return <Loading />
   }
 
+  if (errorMessage) {
+    return (
+      <div>
+        <ErrorComponent message={errorMessage} />
+        {rawError && (
+          <pre className="bg-gray-900 text-white p-4 rounded mt-4 overflow-x-auto text-xs max-w-2xl mx-auto">
+            {JSON.stringify(rawError, null, 2)}
+          </pre>
+        )}
+      </div>
+    )
+  }
+
   // Once we're on the client, it's safe to render the component that uses the context.
   return (
     <LoginCallBack
       successCallback={onSuccess}
       errorCallback={onError}
       customLoadingComponent={<Loading />}
-      customErrorComponent={<ErrorComponent />}
+      customErrorComponent={<ErrorComponent message={errorMessage || undefined} />}
     />
   )
 }
