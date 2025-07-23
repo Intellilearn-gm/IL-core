@@ -1,0 +1,28 @@
+// Pool of random questions for Snapcards
+export const randomQuestionsPool = [
+  { id: 'r1', text: "What’s your most guilty pleasure song?" },
+  { id: 'r2', text: "Describe the funniest thing you’ve ever done on a dare." },
+  { id: 'r3', text: "If you could time-travel, what one moment in crypto history would you visit?" },
+  { id: 'r4', text: "What’s the weirdest food you’ve ever tried—and did you actually like it?" },
+  { id: 'r5', text: "Which childhood cartoon character would make the worst DAO member?" },
+  { id: 'r6', text: "What’s a habit you wish you could break (but secretly enjoy)?" },
+  { id: 'r7', text: "If you could have dinner with any three people—dead or alive—who’d you pick?" },
+  { id: 'r8', text: "What’s the craziest item on your personal bucket list?" },
+  { id: 'r9', text: "Which movie can you quote start to finish without missing a line?" },
+  { id: 'r10', text: "What’s the boldest compliment you’ve ever received?" },
+  { id: 'r11', text: "If you could instantly master any skill—crypto or IRL—which one?" },
+  { id: 'r12', text: "What’s your go-to comfort food after a long day?" },
+  { id: 'r13', text: "What’s the most adventurous thing you’ve ever done (Web3 or otherwise)?" },
+  { id: 'r14', text: "Tell us about a lie you once told your parents (we won’t tell!)." },
+  { id: 'r15', text: "If you could live anywhere in the world, crypto-friendly or not, where?" },
+  { id: 'r16', text: "How do you unwind—Netflix binge, paper trading, or something crazier?" },
+  { id: 'r17', text: "Which trending meme token do you low-key believe in?" },
+  { id: 'r18', text: "What’s the single most valuable life lesson you’ve learned so far?" },
+  { id: 'r19', text: "Favorite childhood memory that still makes you smile?" },
+  { id: 'r20', text: "If you could be famous for one outrageous thing, what would it be?" },
+  { id: 'r21', text: "What’s the dumbest gas fee you’ve ever paid, and why was it worth it?" },
+  { id: 'r22', text: "Which NFT in your wallet embarrasses you the most?" },
+  { id: 'r23', text: "What’s your worst DeFi rug-pull story?" },
+  { id: 'r24', text: "Name a protocol you secretly think is totally overrated." },
+  { id: 'r25', text: "What’s the best piece of crypto advice you’ve ever ignored?" }
+];
