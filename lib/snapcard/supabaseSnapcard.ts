@@ -122,4 +122,17 @@ export async function getProfileByWallet(wallet_address: string) {
     .single();
   if (error) throw error;
   return data;
+}
+
+// Look up a user by username and return their username and wallet_address
+export async function getUserByUsername(username: string) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('username, wallet_address')
+    .eq('username', username)
+    .single();
+  if (error || !data) {
+    return null;
+  }
+  return data;
 } 

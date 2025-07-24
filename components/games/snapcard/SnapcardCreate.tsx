@@ -3,7 +3,9 @@ import { getSnapcardQuestions } from '@/lib/snapcard/SnapcardQuestions';
 import { Button } from '@/components/ui/button';
 import { CreditCard, UserPlus, Send, Copy, Sparkles } from 'lucide-react';
 import { useAddress } from '@thirdweb-dev/react';
-import { createSnapcard, sendSnapcardRequest } from '@/lib/snapcard/supabaseSnapcard';
+import { createSnapcard, sendSnapcardRequest, getUserByUsername } from '@/lib/snapcard/supabaseSnapcard';
+import html2canvas from 'html2canvas';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 
 export default function SnapcardCreate({ onCreated }: { onCreated?: (link: string) => void }) {
   const [questions] = useState(getSnapcardQuestions());
@@ -15,6 +17,8 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
   const [friend, setFriend] = useState('');
   const [sending, setSending] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
   const address = useAddress();
 
   const handleCreate = async () => {
@@ -53,7 +57,19 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
     setSuccess(null);
     try {
       let isWallet = friend.startsWith('0x') && friend.length > 10;
-      await sendSnapcardRequest(snapcardId, isWallet ? friend : undefined, !isWallet ? friend : undefined);
+      let username = !isWallet ? friend : undefined;
+      let wallet = isWallet ? friend : undefined;
+      if (username) {
+        const user = await getUserByUsername(username);
+        if (!user || !user.wallet_address) {
+          setShowShareModal(true);
+          setSending(false);
+          return;
+        }
+        wallet = user.wallet_address;
+        username = user.username;
+      }
+      await sendSnapcardRequest(snapcardId, wallet, username);
       setSuccess('Snapcard sent to your friend!');
       setFriend('');
     } catch (e: any) {
@@ -71,6 +87,20 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
     }
   };
 
+  const handleCaptureSnapcard = async () => {
+    const snapcardDiv = document.getElementById('snapcard-main');
+    if (snapcardDiv) {
+      const canvas = await html2canvas(snapcardDiv, { backgroundColor: null });
+      const url = canvas.toDataURL('image/png');
+      setImageUrl(url);
+      // Optionally, auto-download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'snapcard.png';
+      link.click();
+    }
+  };
+
   // Shorten link for display
   const getShortLink = (l: string) => {
     try {
@@ -82,7 +112,7 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
   };
 
   return (
-    <div className="relative bg-[#181825] rounded-3xl p-10 shadow-2xl max-w-2xl mx-auto mt-8 border border-[#FF6B8A]/60 overflow-hidden flex flex-col items-center animate-fade-in">
+    <div id="snapcard-main" className="relative bg-[#181825] rounded-3xl p-10 shadow-2xl max-w-2xl mx-auto mt-8 border border-[#FF6B8A]/60 overflow-hidden flex flex-col items-center animate-fade-in">
       {/* Animated sparkles and emoji */}
       <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[6rem] opacity-10 animate-spin-slow select-none pointer-events-none">✨</div>
       <div className="absolute top-8 right-8 text-[3rem] opacity-20 animate-bounce select-none pointer-events-none">🪩</div>
@@ -123,8 +153,19 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
             {copied && <span className="text-xs text-[#FF6B8A] font-semibold animate-fade-in">Copied!</span>}
           </div>
           <Button asChild size="sm" variant="outline" className="mt-2 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-bold border-0 shadow hover:scale-105 transition">
-            <a href={`https://twitter.com/intent/tweet?text=Fill%20my%20Snapcard!%20${encodeURIComponent(link)}`} target="_blank" rel="noopener noreferrer">Share on Twitter</a>
+            <a href={`https://twitter.com/intent/tweet?text=Fill%20my%20Snapcard!%20%40Intellilearn_ec%20${encodeURIComponent(link)}`} target="_blank" rel="noopener noreferrer">Share on Twitter</a>
           </Button>
+          <Button onClick={handleCaptureSnapcard} size="sm" variant="outline" className="mt-2 bg-gradient-to-r from-[#FFA45C] to-[#FFD166] text-[#181825] font-bold border-0 shadow hover:scale-105 transition">
+            Capture Snapcard Image
+          </Button>
+          {imageUrl && (
+            <div className="mt-4 flex flex-col items-center">
+              <img src={imageUrl} alt="Snapcard" className="rounded-xl border border-[#FF6B8A]/30 max-w-xs" />
+              <Button asChild size="sm" variant="outline" className="mt-2 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-bold border-0 shadow hover:scale-105 transition">
+                <a href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20Snapcard!%20%40Intellilearn_ec&url=${encodeURIComponent(link)}`} target="_blank" rel="noopener noreferrer">Share Image on X (Twitter)</a>
+              </Button>
+            </div>
+          )}
         </div>
       ) : (
         <Button onClick={handleCreate} disabled={creating} className="w-full mt-2 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-extrabold text-lg py-3 rounded-xl shadow-xl hover:scale-105 transition-all duration-300 animate-pop-in">
@@ -152,6 +193,27 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
           </Button>
         </div>
       )}
+      {/* Share Modal */}
+      <Dialog open={showShareModal} onOpenChange={setShowShareModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>User Not Found</DialogTitle>
+            <DialogDescription>
+              The username or wallet address you entered does not exist. Share your Snapcard link directly with your friend so they can join and respond!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-2 mt-4">
+            <span className="text-xs break-all font-mono bg-[#FFE8D6] px-2 py-1 rounded-lg border border-[#FF6B8A]/30 max-w-[60vw] truncate" title={link}>{getShortLink(link)}</span>
+            <Button onClick={handleCopy} size="icon" variant="outline" className="ml-1">
+              <Copy className="w-4 h-4" />
+            </Button>
+            {copied && <span className="text-xs text-[#FF6B8A] font-semibold animate-fade-in">Copied!</span>}
+          </div>
+          <DialogClose asChild>
+            <Button className="mt-4 w-full bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-bold">Close</Button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

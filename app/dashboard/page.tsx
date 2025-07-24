@@ -62,6 +62,11 @@ export default function DashboardPage() {
   const auth = useOCAuth(); // Get the whole object first
   const address = useAddress();
 
+  // Wait for wallet connection before rendering anything
+  if (!address) {
+    return <LoadingScreen />;
+  }
+
   // Redirect if both OCID and wallet are unauthenticated
   useEffect(() => {
     if (auth && auth.isInitialized && !auth.authState.isAuthenticated && !address) {
@@ -70,6 +75,7 @@ export default function DashboardPage() {
   }, [auth, address]);
 
   const { profile, loading } = useProfile(address || "");
+  // Always call useDailyActivity, but only pass address if profile exists
   const {
     streakData,
     currentStreak,
@@ -77,7 +83,7 @@ export default function DashboardPage() {
     totalTokens,
     loading: streakLoading,
     error: streakError,
-  } = useDailyActivity(address || undefined);
+  } = useDailyActivity(address && profile ? address : undefined);
   const [showStreak, setShowStreak] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
 

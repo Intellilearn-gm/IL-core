@@ -7,6 +7,7 @@ import { useAddress } from '@thirdweb-dev/react';
 import SnapcardFill from '@/components/games/snapcard/SnapcardFill';
 import SnapcardNotification from '@/components/games/snapcard/SnapcardNotification';
 import { getSnapcardByToken, submitSnapcardResponse, getProfileByWallet } from '@/lib/snapcard/supabaseSnapcard';
+import ProfileSetupCard from '@/components/ProfileSetupCard';
 
 export default function SnapcardFillPage() {
   const { snapcardId } = useParams();
@@ -18,6 +19,8 @@ export default function SnapcardFillPage() {
   const [submitted, setSubmitted] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
   const [defaultName, setDefaultName] = useState<string | undefined>(undefined);
+  const [showProfileSetup, setShowProfileSetup] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     if (!snapcardId) return;
@@ -31,14 +34,34 @@ export default function SnapcardFillPage() {
       .finally(() => setLoading(false));
   }, [snapcardId]);
 
+  // Fetch profile and handle first-time wallet users
   useEffect(() => {
     if (!address) return;
     getProfileByWallet(address)
       .then((profile) => {
-        if (profile && profile.username) setDefaultName(profile.username);
+        if (profile && profile.username) {
+          setDefaultName(profile.username);
+          setProfile(profile);
+          setShowProfileSetup(false);
+        } else {
+          setDefaultName(undefined);
+          setProfile(null);
+          setShowProfileSetup(true);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        setDefaultName(undefined);
+        setProfile(null);
+        setShowProfileSetup(true);
+      });
   }, [address]);
+
+  // After profile is created, refetch profile
+  const handleProfileCreated = (newProfile: { username: string; avatar_url: string }) => {
+    setDefaultName(newProfile.username);
+    setProfile(newProfile);
+    setShowProfileSetup(false);
+  };
 
   useEffect(() => {
     if (submitted) {
@@ -77,6 +100,14 @@ export default function SnapcardFillPage() {
         <div className="absolute top-8 left-8 text-[6rem] opacity-10 animate-spin-slow select-none pointer-events-none">🎉</div>
         <div className="absolute bottom-8 right-8 text-[4rem] opacity-10 animate-bounce select-none pointer-events-none">🃏</div>
         {notification && <SnapcardNotification message={notification} />}
+        {showProfileSetup && address && (
+          <ProfileSetupCard
+            isOpen={showProfileSetup}
+            walletAddress={address}
+            onClose={() => setShowProfileSetup(false)}
+            onProfileCreated={handleProfileCreated}
+          />
+        )}
         {loading ? (
           <div className="text-center text-[#7D7A75] py-12 text-lg font-medium">Loading Snapcard...</div>
         ) : error ? (
@@ -93,8 +124,10 @@ export default function SnapcardFillPage() {
               Go to Snapcard Home
             </button>
           </div>
-        ) : snapcard && snapcard.questions ? (
+        ) : snapcard && snapcard.questions && profile && profile.username ? (
           <SnapcardFill questions={snapcard.questions} onSubmit={handleSubmit} defaultName={defaultName} />
+        ) : showProfileSetup ? (
+          <div className="text-center text-[#7D7A75] py-12 text-lg font-medium">Please set up your profile to fill the Snapcard.</div>
         ) : null}
       </div>
     </WalletProtection>

@@ -12,10 +12,7 @@ import { useDailyActivity } from "@/hooks/useDailyActivity";
 export default function ProfileSidebar() {
   const address = useAddress();
   const { profile, loading: profileLoading } = useProfile(address || "");
-  const [copied, setCopied] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  // custom hook for streak data
+  // Always call useDailyActivity, but only pass address if profile exists
   const {
     streakData,
     currentStreak,
@@ -23,7 +20,9 @@ export default function ProfileSidebar() {
     totalTokens,
     loading: streakLoading,
     error: streakError,
-  } = useDailyActivity(address || undefined);
+  } = useDailyActivity(address && profile ? address : undefined);
+  const [copied, setCopied] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const displayName = profile?.username || "Not set";
   const displayAvatar = profile?.avatar_url || "👤";

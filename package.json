@@ -57,6 +57,7 @@
     "embla-carousel-react": "8.5.1",
     "emoji-picker-react": "^4.12.2",
     "ethers": "^5.7.2",
+    "html2canvas": "^1.4.1",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
