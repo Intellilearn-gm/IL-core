@@ -68,6 +68,22 @@ export default function ProfileSetupCard({
     setError(null)
 
     try {
+      // Check if username is unique
+      const { data: existing, error: checkErr } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("username", trimmed)
+        .single();
+      if (existing) {
+        setError("This username is already taken. Please choose another.");
+        setSaving(false);
+        return;
+      }
+      if (checkErr && checkErr.code !== "PGRST116") {
+        setError("Error checking username. Please try again.");
+        setSaving(false);
+        return;
+      }
       const { data, error: supaErr } = await supabase
         .from("profiles")
         .insert({
@@ -76,21 +92,26 @@ export default function ProfileSetupCard({
           avatar_url: emoji!,
         })
         .select()
-        .single()
+        .single();
 
       if (supaErr) {
-        console.error("[ProfileSetupCard] supabase error:", supaErr)
-        setError("Failed to save. Please retry.")
+        if (supaErr.code === "23505" || (supaErr.message && supaErr.message.includes("duplicate key"))) {
+          setError("This username is already taken. Please choose another.");
+        } else {
+          setError("Failed to save. Please retry.");
+        }
       } else {
-        console.log("[ProfileSetupCard] saved row:", data)
-        onProfileCreated({ username: data.username, avatar_url: data.avatar_url })
-        onClose()
+        onProfileCreated({ username: data.username, avatar_url: data.avatar_url });
+        onClose();
       }
-    } catch (err) {
-      console.error("[ProfileSetupCard] unexpected error:", err)
-      setError("Unexpected error. Please try again.")
+    } catch (err: any) {
+      if (err.code === "23505" || (err.message && err.message.includes("duplicate key"))) {
+        setError("This username is already taken. Please choose another.");
+      } else {
+        setError("Unexpected error. Please try again.");
+      }
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 

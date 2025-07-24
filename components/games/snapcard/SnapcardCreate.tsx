@@ -197,20 +197,21 @@ export default function SnapcardCreate({ onCreated }: { onCreated?: (link: strin
       <Dialog open={showShareModal} onOpenChange={setShowShareModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>User Not Found</DialogTitle>
-            <DialogDescription>
-              The username or wallet address you entered does not exist. Share your Snapcard link directly with your friend so they can join and respond!
+            <DialogTitle className="text-center text-2xl font-bold text-[#FF6B8A] mb-2">User Not Found</DialogTitle>
+            <DialogDescription className="text-center text-base text-[#232347] mb-4">
+              The username or wallet address you entered does not exist.<br />
+              <span className="font-semibold text-[#FFA45C]">Share your Snapcard link directly with your friend so they can join and respond!</span>
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col items-center gap-2 mt-4">
-            <span className="text-xs break-all font-mono bg-[#FFE8D6] px-2 py-1 rounded-lg border border-[#FF6B8A]/30 max-w-[60vw] truncate" title={link}>{getShortLink(link)}</span>
-            <Button onClick={handleCopy} size="icon" variant="outline" className="ml-1">
-              <Copy className="w-4 h-4" />
+          <div className="flex flex-col items-center gap-3 mt-2 p-4 bg-[#FFF6F9] rounded-xl border border-[#FF6B8A]/20 shadow">
+            <span className="text-xs break-all font-mono bg-[#FFE8D6] px-3 py-2 rounded-lg border border-[#FF6B8A]/30 max-w-[60vw] text-[#232347] text-center" title={(link ?? '')}>{getShortLink(link ?? '')}</span>
+            <Button onClick={handleCopy} size="sm" variant="outline" className="bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-bold border-0 shadow hover:scale-105 transition mt-1">
+              <Copy className="w-4 h-4 mr-2" /> Copy Link
             </Button>
             {copied && <span className="text-xs text-[#FF6B8A] font-semibold animate-fade-in">Copied!</span>}
           </div>
           <DialogClose asChild>
-            <Button className="mt-4 w-full bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-bold">Close</Button>
+            <Button className="mt-6 w-full bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white font-bold py-2 rounded-lg">Close</Button>
           </DialogClose>
         </DialogContent>
       </Dialog>
