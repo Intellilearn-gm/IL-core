@@ -13,10 +13,20 @@ type Game = {
   color: string
   players: string
   slug: string
+  isNew?: boolean
 }
 
 export default function GamesGrid() {
   const games: Game[] = [
+    {
+      id: 5,
+      name: 'Snapcard',
+      icon: CreditCard,
+      color: 'from-[#FFA45C] to-[#FF6B8A]',
+      players: '2.7k',
+      slug: 'snapcard',
+      isNew: true,
+    },
     {
       id: 1,
       name: 'Archery Pro',
@@ -49,15 +59,7 @@ export default function GamesGrid() {
       players: '1.5k',
       slug: 'oc-code-quest',
     },
-    {
-      id: 5,
-      name: 'Snapcard',
-      icon: CreditCard,
-      color: 'from-[#FFA45C] to-[#FF6B8A]',
-      players: '2.7k',
-      slug: 'snapcard',
-    },
-  ]
+  ];
 
   return (
     <div className="backdrop-blur-xl bg-white/20 border border-white/30 rounded-lg p-6 shadow-xl">
@@ -76,31 +78,27 @@ export default function GamesGrid() {
           <Link
             key={game.id}
             href={`/games/${game.slug}`}
-            className="group relative overflow-hidden rounded-lg border border-white/30 bg-white/20 p-4 transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-lg"
+            className={`group relative overflow-hidden rounded-lg border border-white/30 bg-white/20 p-4 transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-lg`}
             style={{ animationDelay: `${i * 100}ms` }}
           >
+            {/* 'New' badge for Snapcard */}
+            {game.slug === 'snapcard' && (
+              <span className="absolute top-3 right-3 z-20 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">New</span>
+            )}
             {/* Hover‐gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B8A]/10 to-[#FFA45C]/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
             <div className="relative flex flex-col h-full justify-between">
-              {/* Icon + Online count */}
+              {/* Icon */}
               <div className="flex items-center justify-between mb-4">
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${game.color} shadow-md transition-transform group-hover:scale-110`}
                 >
                   <game.icon className="h-6 w-6 text-white" />
                 </div>
-                <div className="text-right">
-                  <div className="text-xs text-[#7D7A75]">Online</div>
-                  <div className="text-sm font-semibold text-[#2E2B2B]">
-                    {game.players}
-                  </div>
-                </div>
               </div>
-
               {/* Name */}
-              <h3 className="mb-3 font-semibold text-[#2E2B2B]">{game.name}</h3>
-
+              <h3 className={`mb-3 font-semibold ${game.slug === 'snapcard' ? 'text-[#FF6B8A] text-lg font-extrabold drop-shadow' : 'text-[#2E2B2B]'}`}>{game.name}</h3>
               {/* Footer: badge + play button */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -112,8 +110,8 @@ export default function GamesGrid() {
                   </Badge>
                   <div className="h-1 w-1 animate-pulse rounded-full bg-green-500" />
                 </div>
-
-                <Button className="rounded-md border-0 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white text-sm transition-all duration-300 hover:shadow-lg">
+                <Button className={`rounded-md border-0 bg-gradient-to-r from-[#FF6B8A] to-[#FFA45C] text-white text-sm transition-all duration-300 hover:shadow-lg ${game.slug === 'snapcard' ? 'font-bold' : ''}`}
+                >
                   Play
                 </Button>
               </div>
