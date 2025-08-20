@@ -11,23 +11,6 @@
   
   > **🎮 Learn Web3 by Playing Games | 🏆 Earn Dynamic NFTs | 🔐 Decentralized Identity | 🌟 Build Your Digital Legacy**
   
-  <style>
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 138, 0.3); }
-      50% { box-shadow: 0 0 40px rgba(255, 107, 138, 0.6); }
-    }
-    .floating { animation: float 3s ease-in-out infinite; }
-    .glowing { animation: glow 2s ease-in-out infinite; }
-  </style>
-  
   ---
 </div>
 
@@ -61,12 +44,6 @@ Imagine a world where learning blockchain isn't about memorizing complex concept
 ### 🎯 **Archery Pro - Precision Meets Knowledge**
 *Master blockchain fundamentals through the art of precision shooting*
 
-<div align="center">
-  <div style="background: linear-gradient(135deg, #FF6B8A, #FFA45C); padding: 20px; border-radius: 15px; margin: 20px 0; box-shadow: 0 10px 30px rgba(255, 107, 138, 0.3);" class="floating">
-    <h3 style="color: white; margin: 0;">🎯 Take Your Shot at Blockchain Mastery</h3>
-    <p style="color: white; margin: 10px 0 0 0;">Adjust angle, calculate power, and hit targets while answering blockchain questions. Each bullseye unlocks new knowledge!</p>
-  </div>
-</div>
 
 **What You'll Learn:**
 - 🔗 **Blockchain Basics** - What makes a blockchain tick
@@ -77,13 +54,6 @@ Imagine a world where learning blockchain isn't about memorizing complex concept
 ### ⛏️ **Block Miner Challenge - Dig Deep, Learn Fast**
 *Collect falling coins while absorbing Web3 wisdom*
 
-<div align="center">
-  <div style="background: linear-gradient(135deg, #FFA45C, #FFD166); padding: 20px; border-radius: 15px; margin: 20px 0; box-shadow: 0 10px 30px rgba(255, 164, 92, 0.3);" class="floating">
-    <h3 style="color: white; margin: 0;">⛏️ Mine Your Way to Web3 Expertise</h3>
-    <p style="color: white; margin: 10px 0 0 0;">Navigate through falling blocks, dodge obstacles, and collect knowledge tokens. Speed and strategy determine your success!</p>
-  </div>
-</div>
-
 **Your Journey:**
 - 🚀 **Fast-Paced Action** - Quick reflexes meet quick learning
 - 📚 **Real-Time Education** - Facts drop as fast as coins
@@ -92,13 +62,6 @@ Imagine a world where learning blockchain isn't about memorizing complex concept
 
 ### 🚀 **OpenCampus Code Quest - Navigate the Digital Cosmos**
 *Pilot your ship through the vast expanse of OCID knowledge*
-
-<div align="center">
-  <div style="background: linear-gradient(135deg, #FFD166, #06D6A0); padding: 20px; border-radius: 15px; margin: 20px 0; box-shadow: 0 10px 30px rgba(255, 209, 102, 0.3);" class="floating">
-    <h3 style="color: white; margin: 0;">🚀 Explore the Frontiers of Digital Identity</h3>
-    <p style="color: white; margin: 10px 0 0 0;">Navigate through space, collect identity tokens, and unlock the secrets of decentralized authentication.</p>
-  </div>
-</div>
 
 **Discover:**
 - 🆔 **Decentralized Identity** - Own your digital self
@@ -109,13 +72,6 @@ Imagine a world where learning blockchain isn't about memorizing complex concept
 ### 🏰 **DAO Dungeon Escape - Governance Through Adventure**
 *Navigate treacherous dungeons while mastering DAO mechanics*
 
-<div align="center">
-  <div style="background: linear-gradient(135deg, #06D6A0, #118AB2); padding: 20px; border-radius: 15px; margin: 20px 0; box-shadow: 0 10px 30px rgba(6, 214, 160, 0.3);" class="floating">
-    <h3 style="color: white; margin: 0;">🏰 Conquer the Realm of Decentralized Governance</h3>
-    <p style="color: white; margin: 10px 0 0 0;">3D dungeon crawling meets DAO governance. Solve puzzles, avoid traps, and understand how communities make decisions.</p>
-  </div>
-</div>
-
 **Master:**
 - 🗳️ **Voting Mechanisms** - How DAOs make decisions
 - 🏛️ **Governance Structures** - From proposals to execution
@@ -124,13 +80,6 @@ Imagine a world where learning blockchain isn't about memorizing complex concept
 
 ### 💳 **Snapcard - Share Knowledge, Build Connections**
 *Create and share interactive learning cards with your network*
-
-<div align="center">
-  <div style="background: linear-gradient(135deg, #118AB2, #073B4C); padding: 20px; border-radius: 15px; margin: 20px 0; box-shadow: 0 10px 30px rgba(17, 138, 178, 0.3);" class="floating">
-    <h3 style="color: white; margin: 0;">💳 Create, Share, and Learn Together</h3>
-    <p style="color: white; margin: 10px 0 0 0;">Design custom learning cards, challenge friends, and build your knowledge network. Learning is better together!</p>
-  </div>
-</div>
 
 **Connect:**
 - 🎨 **Custom Cards** - Design your own learning challenges
